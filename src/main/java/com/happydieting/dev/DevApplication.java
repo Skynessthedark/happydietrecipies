@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DevApplication {
 
 	public static void main(String[] args) {
+		//yeni branch
 		SpringApplication.run(DevApplication.class, args);
 	}
 
