@@ -1,7 +1,6 @@
 package com.happydieting.dev.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +21,9 @@ public class UserModel extends ItemModel implements UserDetails {
     private String password;
     private byte[] avatar;
     private String bio;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<RecipeModel> recipes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
