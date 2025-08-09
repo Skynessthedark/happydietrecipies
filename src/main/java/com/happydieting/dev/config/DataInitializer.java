@@ -4,8 +4,6 @@ import com.happydieting.dev.model.*;
 import com.happydieting.dev.repository.*;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +14,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -36,6 +35,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
     @Resource
     private NutritionUnitRepository nutritionUnitRepository;
+
+    @Resource
+    private IngredientRepository ingredientRepository;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -59,6 +61,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         createUserData();
         createNutritions();
+        createIngredients();
         createRecipes();
         createNutritionalValues();
     }
@@ -132,7 +135,22 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         entityManager.persist(person);
     }
 
+    private void createIngredients() {
+        IngredientModel ingredient1 = new IngredientModel();
+        ingredient1.setName("Pirinç");
+        entityManager.persist(ingredient1);
+
+        IngredientModel ingredient2 = new IngredientModel();
+        ingredient2.setName("Fıstık");
+        entityManager.persist(ingredient2);
+
+        IngredientModel ingredient3 = new IngredientModel();
+        ingredient3.setName("Fındık");
+        entityManager.persist(ingredient3);
+    }
+
     private void createRecipes() {
+        List<IngredientModel> ingredientModels = ingredientRepository.findAll();
         RecipeModel recipe1 = new RecipeModel();
         recipe1.setOwner(userRepository.findByUsername("test1@example.com").get());
         recipe1.setName("Test1 Recepti");
@@ -141,6 +159,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe1.setRecipe("Tariff");
         recipe1.setNutritionValue(100.0);
         recipe1.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("GR").get());
+        recipe1.setIngredients(ingredientModels);
         entityManager.persist(recipe1);
 
         RecipeModel recipe2 = new RecipeModel();
@@ -151,6 +170,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe2.setRecipe("Tariff");
         recipe2.setNutritionValue(1.0);
         recipe2.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("PERSON").get());
+        recipe2.setIngredients(ingredientModels);
         entityManager.persist(recipe2);
     }
 

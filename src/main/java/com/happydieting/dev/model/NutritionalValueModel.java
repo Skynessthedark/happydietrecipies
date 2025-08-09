@@ -4,23 +4,24 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
-@Table(name = "NUTRITIONAL_VALUES")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Data
+@Entity
+@Table(name = "NUTRITIONAL_VALUES", uniqueConstraints = { @UniqueConstraint(columnNames = { "recipe", "type" }) })
 public class NutritionalValueModel extends ItemModel{
 
+    @Column(nullable = false)
     private Double value;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private NutritionTypeModel type;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private NutritionUnitModel unit;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private RecipeModel recipe;
 }

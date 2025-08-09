@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "NUTRITION_UNIT")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class NutritionUnitModel extends ItemModel{
     @Column(nullable = false, unique = true)

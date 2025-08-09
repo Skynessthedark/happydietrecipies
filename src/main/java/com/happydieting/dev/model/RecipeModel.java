@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "RECIPE")
 @EntityListeners(RecipeAuditListener.class)
@@ -18,7 +18,6 @@ public class RecipeModel extends ItemModel{
     private String code;
     @Column(nullable = false)
     private String name;
-    @Column(length = 500)
     private String description;
     @Column(nullable = false)
     private String recipe;
@@ -39,7 +38,11 @@ public class RecipeModel extends ItemModel{
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NutritionalValueModel> nutritionalValues;
 
+    @ManyToMany
+    @JoinTable(name = "RECIPE2INGREDIENT_REL",
+            joinColumns = {@JoinColumn(name = "recipe_id")},
+            inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})
+    private List<IngredientModel> ingredients;
 
-    //private List ingredients;
     //private List categories;
 }
