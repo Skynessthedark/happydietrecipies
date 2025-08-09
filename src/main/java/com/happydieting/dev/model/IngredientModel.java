@@ -6,13 +6,11 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
-@Table(name = "NUTRITION_TYPE")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class NutritionTypeModel extends ItemModel{
-    @Column(nullable = false, unique = true)
-    private String code;
+@Entity
+@Table(name = "INGREDIENT")
+public class IngredientModel extends ItemModel{
     @Column(nullable = false)
     private String name;
 }
