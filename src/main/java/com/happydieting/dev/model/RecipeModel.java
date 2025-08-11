@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -36,13 +36,18 @@ public class RecipeModel extends ItemModel{
     private NutritionUnitModel nutritionUnit;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<NutritionalValueModel> nutritionalValues;
+    private Set<NutritionalValueModel> nutritionalValues;
 
     @ManyToMany
     @JoinTable(name = "RECIPE2INGREDIENT_REL",
             joinColumns = {@JoinColumn(name = "recipe_id")},
             inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})
-    private List<IngredientModel> ingredients;
+    private Set<IngredientModel> ingredients;
 
-    //private List categories;
+    @ManyToMany
+    @JoinTable(
+            name = "RECIPE2CATEGORY_REL",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<CategoryModel> categories;
 }

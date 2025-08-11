@@ -10,7 +10,10 @@ import java.util.Optional;
 
 public interface IngredientRepository extends JpaRepository<IngredientModel, Long> {
     Optional<IngredientModel> findIngredientModelById(Long id);
+    Optional<IngredientModel> findIngredientModelByCode(String code);
     Optional<IngredientModel> findIngredientModelByName(String name);
+    boolean existsByCode(String code);
+
     @Query("SELECT im FROM IngredientModel im " +
             "WHERE LENGTH(:keyword) >= 3 AND LOWER(im.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<IngredientModel> searchByName(@Param("keyword") String keyword);
