@@ -14,8 +14,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -39,6 +40,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     @Resource
     private IngredientRepository ingredientRepository;
 
+    @Resource
+    private CategoryRepository categoryRepository;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private static final String DATA_INITIALIZED_KEY = "data.initialized";
@@ -61,6 +65,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         createUserData();
         createNutritions();
+        createCategories();
         createIngredients();
         createRecipes();
         createNutritionalValues();
@@ -135,22 +140,54 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         entityManager.persist(person);
     }
 
+    private void createCategories() {
+        CategoryModel mainCat = new CategoryModel();
+        mainCat.setCode("HAPPY_DIET");
+        mainCat.setName("Mutlu Diyet Tarifleri");
+        entityManager.persist(mainCat);
+
+        Set<CategoryModel> parentCategories = new HashSet<>();
+        parentCategories.add(mainCat);
+
+        CategoryModel cat1 = new CategoryModel();
+        cat1.setCode("GLUTEN_FREE");
+        cat1.setName("Glutensiz");
+        cat1.setParentCategories(parentCategories);
+        entityManager.persist(cat1);
+
+        CategoryModel cat2 = new CategoryModel();
+        cat2.setCode("VEGAN");
+        cat2.setName("Vegan");
+        cat2.setParentCategories(parentCategories);
+        entityManager.persist(cat2);
+    }
+
     private void createIngredients() {
+        Set<CategoryModel> categories = new HashSet<>();
+        categories.add(categoryRepository.findCategoryModelByCode("GLUTEN_FREE").get());
+        categories.add(categoryRepository.findCategoryModelByCode("VEGAN").get());
+
         IngredientModel ingredient1 = new IngredientModel();
+        ingredient1.setCode("RICE");
         ingredient1.setName("Pirinç");
+        ingredient1.setCategories(categories);
         entityManager.persist(ingredient1);
 
         IngredientModel ingredient2 = new IngredientModel();
+        ingredient1.setCode("PEANUT");
         ingredient2.setName("Fıstık");
+        ingredient1.setCategories(categories);
         entityManager.persist(ingredient2);
 
         IngredientModel ingredient3 = new IngredientModel();
+        ingredient1.setCode("HAZELNUT");
         ingredient3.setName("Fındık");
+        ingredient1.setCategories(categories);
         entityManager.persist(ingredient3);
     }
 
     private void createRecipes() {
-        List<IngredientModel> ingredientModels = ingredientRepository.findAll();
+        Set<IngredientModel> ingredientModels = Set.copyOf(ingredientRepository.findAll());
         RecipeModel recipe1 = new RecipeModel();
         recipe1.setOwner(userRepository.findByUsername("test1@example.com").get());
         recipe1.setName("Test1 Recepti");
@@ -160,6 +197,12 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe1.setNutritionValue(100.0);
         recipe1.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("GR").get());
         recipe1.setIngredients(ingredientModels);
+
+        Set<CategoryModel> categories1 = new HashSet<>();
+        categories1.add(categoryRepository.findCategoryModelByCode("GLUTEN_FREE").get());
+        categories1.add(categoryRepository.findCategoryModelByCode("VEGAN").get());
+
+        recipe1.setCategories(categories1);
         entityManager.persist(recipe1);
 
         RecipeModel recipe2 = new RecipeModel();
@@ -171,6 +214,11 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe2.setNutritionValue(1.0);
         recipe2.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("PERSON").get());
         recipe2.setIngredients(ingredientModels);
+
+        Set<CategoryModel> categories2 = new HashSet<>();
+        categories2.add(categoryRepository.findCategoryModelByCode("GLUTEN_FREE").get());
+
+        recipe2.setCategories(categories2);
         entityManager.persist(recipe2);
     }
 
