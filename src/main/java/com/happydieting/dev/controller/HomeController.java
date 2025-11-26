@@ -1,15 +1,13 @@
 package com.happydieting.dev.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api")
+@Controller
 public class HomeController {
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Merhaba, token ile giriş yaptınız!";
+    @GetMapping("/")
+    public String getHome() {
+        return "home";
     }
 }

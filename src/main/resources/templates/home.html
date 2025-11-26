@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <th:block th:replace="layout/main :: layout-head"></th:block>
+    <title>Giriş Yap</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<main class="flex-grow-1">
+    <div th:replace="layout/main :: navbar"></div>
+
+    <!-- Header-->
+    <header class="py-5">
+        <div class="container px-5 pb-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-xxl-5">
+                    <!-- Header text content-->
+                    <div class="text-center text-xxl-start">
+                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Welcome to Happy Diet Recipes</span></h1>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+
+<script th:replace="~{layout/main :: scripts}"></script>
+</body>
+</html>
