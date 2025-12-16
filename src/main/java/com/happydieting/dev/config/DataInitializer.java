@@ -46,6 +46,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private static final String DATA_INITIALIZED_KEY = "data.initialized";
+
     @Autowired
     private NutritionTypeRepository nutritionTypeRepository;
 

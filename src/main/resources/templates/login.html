@@ -37,9 +37,9 @@
                     <span th:text="${successMessage}"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <form id="loginForm" th:action="@{/login}" method="post">
+                <form id="loginForm" name="loginForm" th:action="@{/login}" method="post">
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="email" type="email" name="email" required />
+                        <input class="form-control" id="email" type="email" name="username" required />
                         <label for="email">Email</label>
                         <div class="invalid-feedback" data-sb-feedback="email:required">Email is required.</div>
                     </div>
