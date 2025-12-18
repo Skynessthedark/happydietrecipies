@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
-    <th:block th:replace="layout/main :: layout-head"></th:block>
+    <th:block th:replace="~{layout/main :: layout-head}"></th:block>
     <title>Giriş Yap</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <main class="flex-grow-1">
-    <div th:replace="layout/main :: navbar"></div>
+    <div th:replace="~{layout/main :: navbar}"></div>
 
     <header class="py-5">
         <div class="container px-5">
