@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="submit-button(text)">
+    <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit" th:text="${text}">Submit</button></div>
+</div>
+</body>
+</html>

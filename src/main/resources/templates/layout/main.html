@@ -18,6 +18,7 @@
 
         <!-- Custom CSS -->
         <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="stylesheet" th:href="@{/css/layout.css}">
     </th:block>
 </head>
 <body>
@@ -44,13 +45,15 @@
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" th:href="@{/recipes}" role="button"
-                       data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
                         <span>Recipes</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <a class="dropdown-item" th:href="@{/recipes/add}">New Recipe</a>
+                            <a class="dropdown-item" th:href="@{/recipes}">My Recipes</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/recipes/new}">New Recipe</a>
                         </li>
                     </ul>
                 </li>
@@ -143,8 +146,11 @@
     <!-- Bootstrap 5 JS -->
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
-    <!-- Custom JavaScript -->
     <script th:src="@{/js/scripts.js}"></script>
+</div>
+<!-- Scripts Fragment -->
+<div th:fragment="form-scripts">
+    <script th:src="@{/js/forms.js}"></script>
 </div>
 </body>
 </html>

@@ -7,14 +7,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "NUTRITIONAL_VALUES", uniqueConstraints = { @UniqueConstraint(columnNames = { "recipe", "type" }) })
+@Table(name = "NUTRITIONAL_VALUES", uniqueConstraints = { @UniqueConstraint(columnNames = { "recipe_id", "type_id" }) })
 public class NutritionalValueModel extends ItemModel{
 
     @Column(nullable = false)
     private Double value;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "type_id", nullable = false)
     private NutritionTypeModel type;
 
     @ManyToOne
@@ -22,6 +22,6 @@ public class NutritionalValueModel extends ItemModel{
     private NutritionUnitModel unit;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "recipe_id", nullable = false)
     private RecipeModel recipe;
 }

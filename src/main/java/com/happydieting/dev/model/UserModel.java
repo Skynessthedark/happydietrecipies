@@ -23,9 +23,6 @@ public class UserModel extends ItemModel implements UserDetails {
     private byte[] avatar;
     private String bio;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY)
-    private Set<RecipeModel> recipes;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

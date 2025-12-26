@@ -25,7 +25,7 @@ public class RecipeModel extends ItemModel{
     private byte[] image;
 
     private String tips;
-    private Double nutritionValue;
+    private Double servingAmount;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -33,7 +33,7 @@ public class RecipeModel extends ItemModel{
 
     @ManyToOne
     @JoinColumn
-    private NutritionUnitModel nutritionUnit;
+    private NutritionUnitModel servingUnit;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<NutritionalValueModel> nutritionalValues;

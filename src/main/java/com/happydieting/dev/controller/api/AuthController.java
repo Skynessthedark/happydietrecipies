@@ -1,4 +1,4 @@
-package com.happydieting.dev.controller;
+package com.happydieting.dev.controller.api;
 
 import com.happydieting.dev.data.AuthData;
 import com.happydieting.dev.security.service.CustomUserDetailsService;
