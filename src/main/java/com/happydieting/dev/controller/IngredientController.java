@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/ingredients")
+@RequestMapping("/ingredient")
 public class IngredientController {
 
     private IngredientRepository ingredientRepository;
@@ -25,7 +25,7 @@ public class IngredientController {
 
     @GetMapping("/search")
     @ResponseBody
-    public List<IngredientData> searchSellers(@RequestParam String ingredientName) {
+    public List<IngredientData> searchIngredients(@RequestParam String ingredientName) {
         return ingredientRepository.searchDataByName(ingredientName);
     }
 }

@@ -8,12 +8,12 @@
 <main class="flex-grow-1">
     <div th:replace="~{layout/main :: navbar}"></div>
 
-    <header class="py-5">
+    <header class="py-3">
         <div class="container px-5">
             <div class="row gx-5 align-items-center">
                 <div>
                     <div class="text-center text-xxl-center">
-                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">New Recipe</span></h1>
+                        <h1 class="display-2 fw-bolder mb-5"><span class="text-gradient d-inline">New Recipe</span></h1>
                     </div>
                 </div>
 
@@ -22,13 +22,12 @@
     </header>
 
     <div class="bg-light rounded-4 py-5 px-4 px-md-5">
-        <div class="text-center mb-5">
-            <p class="lead fw-normal text-muted mb-0">(<span class="required-field">*</span>)Please fill in the required fields.</p>
-        </div>
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-8 col-xl-4">
-                <div th:replace="~{layout/messages :: submit-messages}"></div>
-                <form id="recipeForm" name="recipeForm" th:action="@{/recipes/new}" th:object="${recipe}" method="post">
+        <form id="recipeForm" name="recipeForm" th:action="@{/recipes/new}" th:object="${recipe}" method="post">
+            <div class="text-start mb-2">
+                <p class="fw-lighter text-muted mb-0">(<span class="required-field">*</span>)Please fill in the required fields.</p>
+            </div>
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6 col-lg-4">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="name" th:field="*{name}"
                                placeholder="Recipe Name" required>
@@ -41,50 +40,49 @@
                         <label for="description"><span class="required-field">*</span>Description</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select th:field="*{categories}" class="form-select" id="categories" required>
-                            <option value="">Select Category</option>
-                            <option th:each="category : ${categories}" th:value="${category.code}" th:text="${category.name}"></option>
-                        </select>
-                        <label for="categories"><span class="required-field">*</span>Categories</label>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}"></div>
+                    <div class="mb-3">
+                        <label for="modalCategorySearch"><span class="required-field">*</span>Categories</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="modalCategorySearch" placeholder="Enter category name" />
+                            <button class="btn btn-outline-secondary" type="button" onclick="categoryPlugin.search()">
+                                <i class="bi-search"></i>
+                            </button>
+                        </div>
+                        <div id="categorySearchResults" class="list-group mt-2 search-result-div"></div>
+                        <div id="selectedCategories" class="mt-2"></div>
+                        <input type="hidden" id="modalCategories" name="categoryCodes" />
                     </div>
-
-                    <div class="form-floating mb-3">
+                    <div class="mb-3">
+                        <label for="modalIngredientSearch"><span class="required-field">*</span>Ingredients</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="modalIngredientSearch" placeholder="Enter ingredient name" />
                             <button class="btn btn-outline-secondary" type="button" onclick="ingredientPlugin.search()">
                                 <i class="bi-search"></i>
                             </button>
                         </div>
-                        <div id="ingredientSearchResults" class="list-group mt-2" style="display:none; max-height:200px; overflow-y:auto;"></div>
+                        <div id="ingredientSearchResults" class="list-group mt-2 search-result-div"></div>
                         <div id="selectedIngredients" class="mt-2"></div>
-                        <input type="hidden" id="modalIngredients" name="ingredientIds" />
+                        <input type="hidden" id="modalIngredients" name="ingredientCodes" />
                     </div>
-
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="recipe" th:field="*{recipe}"
                                   placeholder="Recipe" style="height: 100px"></textarea>
-                        <label for="recipe">Recipe<span class="required-field">*</span></label>
+                        <label for="recipe"><span class="required-field">*</span>Recipe</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('recipe')}" th:errors="*{recipe}"></div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="servingUnit" th:field="*{servingUnit}" placeholder="Nutrition Unit">
-                        <label for="servingUnit">Serving Unit</label>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('servingUnit')}" th:errors="*{servingUnit}"></div>
+                        <select class="form-select" id="servingUnit" th:field="*{servingUnit}" required>
+                            <option value="">Select Serving Unit</option>
+                            <option th:each="unit : ${servingUnits}" th:value="${unit.code}"
+                                    th:text="${unit.name + ' (' + unit.code + ')'}">Serving Unit (Code)</option>
+                        </select>
+                        <label for="servingUnit"><span class="required-field">*</span>Serving Unit</label>
+                        <div th:if="${#fields.hasErrors('servingUnit')}" class="text-danger" th:errors="*{servingUnit}"></div>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="servingAmount" th:field="*{servingAmount}" placeholder="Nutrition Value">
-                        <label for="servingAmount">Serving Amount</label>
+                        <label for="servingAmount"><span class="required-field">*</span>Serving Amount</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('servingAmount')}" th:errors="*{servingAmount}"></div>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <!--                        TODO: MultiSelect-->
-                        <select class="form-select" id="nutritionalValues" th:field="*{nutritionalValues}">
-                            <option value="">Select Nutritional Value</option>
-                        </select>
-                        <label for="ingredients"><span class="required-field">*</span>Nutritional Values</label>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}"></div>
                     </div>
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="tips" th:field="*{tips}"
@@ -92,11 +90,39 @@
                         <label for="tips">Tips</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('tips')}" th:errors="*{tips}"></div>
                     </div>
-
-                    <div th:replace="~{layout/buttons :: submit-button('Save')}"></div>
-                </form>
+                </div>
+                <div class="col-lg-6 col-lg-4">
+                    <div th:each="type, index : ${nutritionalTypes}" th th:if="${!nutritionalTypes.isEmpty()}">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" th:id="'type_' + ${type.getId()}" placeholder="Nutrition Value">
+                            <label th:for="'type_' + ${type.getId()}" th:text="${type.getName()}">Nutrition Value</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label class="form-label"><span class="required-field">*</span>Sample Recipe Image</label>
+                        <div class="image-upload-area" id="recipeImageArea">
+                            <div id="recipeImagePreview">
+                                <i class="bi bi-cloud-upload display-4 text-muted"></i>
+                                <p class="mt-2 text-muted">To upload image drag or select from file system...</p>
+                                <small class="text-muted">PNG, JPG, GIF (Max: 2MB)</small>
+                            </div>
+                            <img id="recipePreviewImg" class="preview-image mt-3" style="display: none;">
+                            <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" style="display:none;">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <input type="file" id="recipeFile" name="recipeFile" accept="image/*" style="display: none;">
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="row gx-5 justify-content-end">
+                <div class="col-lg-2 col-lg-2">
+                    <div class="form-floating mb-3">
+                        <div th:replace="~{layout/buttons :: submit-button('Save')}"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
 </main>
@@ -105,7 +131,6 @@
 
 <script th:replace="~{layout/main :: scripts}"></script>
 <script th:replace="~{layout/main :: form-scripts}"></script>
-<script th:src="@{/js/custom/ingredient-selector.js}"></script>
 <script th:src="@{/js/custom/recipe.js}"></script>
 
 </body>

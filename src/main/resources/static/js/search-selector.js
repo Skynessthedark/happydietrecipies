@@ -1,6 +1,6 @@
 (function (window) {
 
-    function IngredientSelector(options) {
+    function SearchSelector(options) {
 
         const config = {
             searchInputId: '',
@@ -12,13 +12,13 @@
             ...options
         };
 
-        let selectedIngredients = [];
+        let selectedOptions = [];
 
         function init() {
             const input = document.getElementById(config.searchInputId);
 
             if (!input) {
-                console.error('IngredientSelector: search input not found');
+                console.error('SearchSelector: search input not found');
                 return;
             }
 
@@ -47,7 +47,7 @@
             container.innerHTML = '';
 
             if (!items || items.length === 0) {
-                container.innerHTML = `<div class="list-group-item">Ingredient not found</div>`;
+                container.innerHTML = `<div class="list-group-item">No result.</div>`;
                 container.style.display = 'block';
                 return;
             }
@@ -70,14 +70,14 @@
         }
 
         function add(item) {
-            if (selectedIngredients.some(i => i.code === item.code)) return;
+            if (selectedOptions.some(i => i.code === item.code)) return;
 
-            selectedIngredients.push(item);
+            selectedOptions.push(item);
             renderSelected();
         }
 
         function remove(code) {
-            selectedIngredients = selectedIngredients.filter(i => i.code !== code);
+            selectedOptions = selectedOptions.filter(i => i.code !== code);
             renderSelected();
         }
 
@@ -85,7 +85,7 @@
             const container = document.getElementById(config.selectedContainerId);
             container.innerHTML = '';
 
-            selectedIngredients.forEach(item => {
+            selectedOptions.forEach(item => {
                 const badge = document.createElement('span');
                 badge.className = 'badge bg-primary me-2 mb-2';
                 badge.innerHTML = `
@@ -99,10 +99,11 @@
             });
 
             document.getElementById(config.hiddenInputId).value =
-                selectedIngredients.map(i => i.code).join(',');
+                selectedOptions.map(i => i.code).join(',');
 
             const searchContainer = document.getElementById(config.resultContainerId);
             searchContainer.innerHTML = '';
+            document.getElementById(config.searchInputId).value = '';
         }
 
         return {
@@ -111,6 +112,6 @@
         };
     }
 
-    window.IngredientSelector = IngredientSelector;
+    window.SearchSelector = SearchSelector;
 
 })(window);
