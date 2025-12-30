@@ -91,6 +91,43 @@
   }
 }
 
+/* Arka plan resmini yöneten sınıf */
+.imgBackgroundFood {
+  /* linear-gradient resmin üzerine hafif bir karanlık katman ekleyerek yazıların okunmasını sağlar */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  url("../images/alerjiImgFood.jpeg"); /* CSS dosyasının konumuna göre yol değişebilir */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Formun arkasındaki şeffaf panel (Cam efekti) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Safari tarayıcı desteği */
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: none;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıkların resim üzerinde parlaması için */
+.text-white-shadow {
+  color: white !important;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Footer ve Navbar beyazlığını zorla şeffaf yapma (Geçersiz kılma) */
+
+
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

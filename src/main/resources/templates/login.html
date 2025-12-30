@@ -4,45 +4,24 @@
     <th:block th:replace="~{layout/main :: layout-head}"></th:block>
     <title>Giriş Yap</title>
 
-    <style th:inline="css">
-        /* Arka plan resmini yöneten sınıf */
-        .imgBackgroundFood {
-            /* Thymeleaf syntax ile dinamik resim yolu */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-            url([[@{/images/alerjiImgFood.jpeg}]]);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+    <style>
+        /* Navbar, Footer ve tüm gri/beyaz arka planlı Bootstrap sınıflarını şeffaf yapar */
+        .navbar.bg-white,
+        .bg-light,
+        footer.bg-white,
+        .py-5.bg-light {
+            background-color: transparent !important;
+            background: transparent !important;
+            border: none !important;
         }
 
-        /* Formun arkasındaki şeffaf panel (Cam efekti) */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8) !important; /* Şeffaflık seviyesi */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px); /* Safari desteği */
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: none;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
 
-        /* Başlıkların resim üzerinde parlaması için */
-        .text-white-shadow {
-            color: white !important;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-        }
     </style>
+
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 imgBackgroundFood">
 
-
-<main class="flex-grow-1 imgBackgroundFood">
+<main class="flex-grow-1">
     <div th:replace="~{layout/main :: navbar}"></div>
 
     <header class="py-5">
