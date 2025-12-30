@@ -1,12 +1,28 @@
-/* Arka plan resmini ve stilini yöneten class */
+/* Arka plan resmini yöneten sınıf */
 .imgBackgroundFood {
-    /* NOT: Resmin static/images/food-bg.jpg konumunda olduğunu varsaydım */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../images/alerjiImgFood.jpeg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("/images/alerjiImgFood.jpeg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     background-repeat: no-repeat;
+    /* Main içeriğinin en az ekran boyu kadar olmasını sağlar */
     min-height: 100vh;
 }
 
+/* Formun arkasındaki şeffaf panel (Cam efekti) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px); /* Arkadaki resmi hafif bulanıklaştırır */
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: none;
+    max-width: 600px; /* Kutunun çok yayılmaması için */
+    margin: 0 auto;
+}
+
+/* Başlıkların resim üzerinde parlaması için */
+.text-white-shadow {
+    color: white !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}

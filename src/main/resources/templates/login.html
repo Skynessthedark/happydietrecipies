@@ -3,9 +3,46 @@
 <head>
     <th:block th:replace="~{layout/main :: layout-head}"></th:block>
     <title>Giriş Yap</title>
+
+    <style th:inline="css">
+        /* Arka plan resmini yöneten sınıf */
+        .imgBackgroundFood {
+            /* Thymeleaf syntax ile dinamik resim yolu */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url([[@{/images/alerjiImgFood.jpeg}]]);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Formun arkasındaki şeffaf panel (Cam efekti) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8) !important; /* Şeffaflık seviyesi */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); /* Safari desteği */
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: none;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Başlıkların resim üzerinde parlaması için */
+        .text-white-shadow {
+            color: white !important;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+    </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<main class="flex-grow-1">
+
+
+<main class="flex-grow-1 imgBackgroundFood">
     <div th:replace="~{layout/main :: navbar}"></div>
 
     <header class="py-5">
@@ -13,7 +50,8 @@
             <div class="row gx-5 align-items-center">
                 <div>
                     <div class="text-center text-xxl-center">
-                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Welcome to Happy Diet Recipes</span></h1>
+                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Welcome to Happy Diet Recipes</span>
+                        </h1>
                     </div>
                 </div>
 
@@ -21,7 +59,7 @@
         </div>
     </header>
 
-    <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+    <div class="rounded-4 py-5 px-4 px-md-5">
         <div class="text-center mb-5">
             <p class="lead fw-normal text-muted mb-0">Login to explore more recipes within your taste!</p>
         </div>
@@ -39,16 +77,19 @@
                 </div>
                 <form id="loginForm" name="loginForm" th:action="@{/login}" method="post">
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="email" type="email" name="username" required />
+                        <input class="form-control" id="email" type="email" name="username" required/>
                         <label for="email">Email</label>
                         <div class="invalid-feedback" data-sb-feedback="email:required">Email is required.</div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" name="password" required />
+                        <input class="form-control" id="password" type="password" name="password" required/>
                         <label for="password">Password</label>
-                        <div class="invalid-feedback" data-sb-feedback="phone:required">Please enter a valid password.</div>
+                        <div class="invalid-feedback" data-sb-feedback="phone:required">Please enter a valid password.
+                        </div>
                     </div>
-                    <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Login</button></div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Login</button>
+                    </div>
                 </form>
             </div>
         </div>
