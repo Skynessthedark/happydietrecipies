@@ -1,0 +1,12 @@
+/* Arka plan resmini ve stilini yöneten class */
+.imgBackgroundFood {
+    /* NOT: Resmin static/images/food-bg.jpg konumunda olduğunu varsaydım */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../images/alerjiImgFood.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
