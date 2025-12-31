@@ -8,7 +8,18 @@
     --light-color: #f8f9fa;
     --dark-color: #212529;
 }
-
+.imgBackgroundFood {
+    /* linear-gradient resmin üzerine hafif bir karanlık katman ekleyerek yazıların okunmasını sağlar */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("../images/alerjiImgFood.jpeg"); /* CSS dosyasının konumuna göre yol değişebilir */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 body {
     background-color: #f5f5f5;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

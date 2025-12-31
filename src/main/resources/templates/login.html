@@ -4,8 +4,20 @@
     <th:block th:replace="~{layout/main :: layout-head}"></th:block>
     <title>Giriş Yap</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
+
+    <style>
+        /* Navbar, Footer ve tüm gri/beyaz arka planlı Bootstrap sınıflarını şeffaf yapar */
+        .navbar.bg-white,
+        .bg-light,
+        footer.bg-white,
+        .py-5.bg-light {
+            background-color: transparent !important;
+            background: transparent !important;
+            border: none !important;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 imgBackgroundFood">
 <main class="flex-grow-1">
     <div th:replace="~{layout/main :: navbar}"></div>
 
