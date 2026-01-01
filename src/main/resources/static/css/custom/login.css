@@ -10,3 +10,21 @@
     display: flex;
     flex-direction: column;
 }
+
+/* Bootstrap Arka Plan ve Kenarlık Sıfırlama */
+.navbar.bg-white,
+.bg-light,
+footer.bg-white,
+.py-5.bg-light,
+.card.bg-light {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important; /* Varsa gölgeyi kaldırır */
+}
+
+/* Sayfa geçişlerinde veya kaydırmada pürüzsüz görünüm için */
+.navbar,
+footer {
+    transition: background-color 0.3s ease;
+}
