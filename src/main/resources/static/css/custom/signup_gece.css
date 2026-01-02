@@ -1,0 +1,130 @@
+/* =====================================================
+   ANA ARKA PLAN (OPAĞI ARTIRILMIŞ + DENGELİ)
+   ===================================================== */
+.imgBackgroundFood {
+    background-image:
+            linear-gradient(
+                    rgba(0, 0, 0, 0.6),
+                    rgba(0, 0, 0, 0.6)
+            ),
+            url("../../images/alerjiImgFood.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =====================================================
+   NAVBAR (KOYU – PREMIUM)
+   ===================================================== */
+.navbar {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =====================================================
+   FORM KARTI (MERKEZ – BEYAZ – SHADOW)
+   ===================================================== */
+.bg-light.rounded-4 {
+    background-color: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    max-width: 620px;
+    margin: 40px auto;
+    padding: 45px !important;
+}
+
+/* =====================================================
+   INPUT & SELECT TASARIMI
+   ===================================================== */
+.form-control,
+.form-select {
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    padding: 12px 14px !important;
+    font-size: 15px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+/* =====================================================
+   PROFESYONEL FOOTER (GLASSMORPHISM)
+   ===================================================== */
+footer {
+    position: relative;
+    margin-top: auto;
+
+    background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.15)
+    ) !important;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Bootstrap footer arka planlarını bastır */
+footer.bg-light,
+footer.bg-white,
+footer.py-5 {
+    background: transparent !important;
+}
+
+/* Footer iç container */
+footer .container,
+footer .container-fluid {
+    background: transparent !important;
+}
+
+/* =====================================================
+   FOOTER YAZILARI
+   ===================================================== */
+footer p,
+footer span {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+/* Footer linkleri */
+footer a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* Linkler arası nokta ayırıcı */
+footer a + a::before {
+    content: "•";
+    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* =====================================================
+   MOBİL FIX (BACKGROUND FIXED SORUNU)
+   ===================================================== */
+@media (max-width: 768px) {
+    .imgBackgroundFood {
+        background-attachment: scroll;
+    }
+}
