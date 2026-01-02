@@ -29,9 +29,9 @@
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-6 col-lg-4">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="name" th:field="*{name}"
+                        <input type="text" class="form-control" id="recipe-name" th:field="*{name}"
                                placeholder="Recipe Name" required>
-                        <label for="name"><span class="required-field">*</span>Recipe Name</label>
+                        <label for="recipe-name"><span class="required-field">*</span>Recipe Name</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                     </div>
                     <div class="form-floating mb-3">
@@ -50,7 +50,7 @@
                         </div>
                         <div id="categorySearchResults" class="list-group mt-2 search-result-div"></div>
                         <div id="selectedCategories" class="mt-2"></div>
-                        <input type="hidden" id="modalCategories" name="categoryCodes" />
+                        <input type="hidden" id="categoryCodes" required/>
                     </div>
                     <div class="mb-3">
                         <label for="modalIngredientSearch"><span class="required-field">*</span>Ingredients</label>
@@ -62,11 +62,11 @@
                         </div>
                         <div id="ingredientSearchResults" class="list-group mt-2 search-result-div"></div>
                         <div id="selectedIngredients" class="mt-2"></div>
-                        <input type="hidden" id="modalIngredients" name="ingredientCodes" />
+                        <input type="hidden" id="ingredientCodes" required />
                     </div>
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="recipe" th:field="*{recipe}"
-                                  placeholder="Recipe" style="height: 100px"></textarea>
+                                  placeholder="Recipe" style="height: 100px" required></textarea>
                         <label for="recipe"><span class="required-field">*</span>Recipe</label>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('recipe')}" th:errors="*{recipe}"></div>
                     </div>
@@ -92,14 +92,15 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-lg-4">
-                    <div th:each="type, index : ${nutritionalTypes}" th th:if="${!nutritionalTypes.isEmpty()}">
+                    <div th:each="type, index : ${nutritionalTypes}" th:if="${!nutritionalTypes.isEmpty()}">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" th:id="'type_' + ${type.getId()}" placeholder="Nutrition Value">
-                            <label th:for="'type_' + ${type.getId()}" th:text="${type.getName()}">Nutrition Value</label>
+                            <input type="hidden" class="nutritionType" th:id="'type-' + ${type.getCode()}" th:value="${type.getCode()}">
+                            <input type="text" class="form-control" th:id="'nutrition-value-' + ${type.getCode()}" placeholder="Nutrition Value">
+                            <label th:for="'nutrition-value-' + ${type.getCode()}" th:text="${type.getName()}">Nutrition Value</label>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <label class="form-label"><span class="required-field">*</span>Sample Recipe Image</label>
+                        <label class="">Sample Recipe Image</label>
                         <div class="image-upload-area" id="recipeImageArea">
                             <div id="recipeImagePreview">
                                 <i class="bi bi-cloud-upload display-4 text-muted"></i>
@@ -111,7 +112,7 @@
                                 <i class="bi bi-x-lg"></i>
                             </button>
                         </div>
-                        <input type="file" id="recipeFile" name="recipeFile" accept="image/*" style="display: none;">
+                        <input type="file" id="recipeFile" accept="image/*" style="display: none;">
                     </div>
                 </div>
             </div>
