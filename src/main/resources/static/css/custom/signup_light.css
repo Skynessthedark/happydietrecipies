@@ -5,12 +5,12 @@
     --bg-soft: #f4f6f8;
     --text-main: #2f2f2f;
     --text-muted: #6f6f6f;
-    --border-soft: #0c0c0c;
+    --border-soft: #121111;
     --primary-soft: #4f6ef7;
 }
 
 /* =====================================================
-   ANA ARKA PLAN (DENGELİ)
+   ANA ARKA PLAN
    ===================================================== */
 .imgBackgroundFood {
     background-image:
@@ -30,7 +30,7 @@
 }
 
 /* =====================================================
-   NAVBAR (KURUMSAL)
+   NAVBAR
    ===================================================== */
 .navbar {
     background-color: #ffffff !important;
@@ -43,52 +43,88 @@
 }
 
 /* =====================================================
-   FORM KARTI (ANA ODAK)
+   FORM KARTI (GENİŞLETİLDİ)
    ===================================================== */
 .bg-light.rounded-4 {
     background-color: #ffffff !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
 
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08);
 
-    max-width: 560px;
-    margin: 48px auto;
-    padding: 40px !important;
+    max-width: 700px; /* FORM GENİŞ */
+    width: 100%;
+    margin: 56px auto;
+    padding: 44px !important;
 }
 
 /* =====================================================
-   INPUT / SELECT (PROFESYONEL)
+   BOOTSTRAP GRID SIFIRLAMA
    ===================================================== */
-.form-control,
-.form-select {
+.bg-light.rounded-4 .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.bg-light.rounded-4 .row > * {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* col-6 / col-md-6 bile olsa TAM GENİŞ olsun */
+.bg-light.rounded-4 .col-6,
+.bg-light.rounded-4 .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.image-upload-area {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto 24px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =====================================================
+   FORM INPUT & SELECT
+   ===================================================== */
+.bg-light.rounded-4 .form-control,
+.bg-light.rounded-4 .form-select {
+    width: 100%;
+    max-width: 560px;  /* ⭐ GÖZ YORMAYAN GENİŞLİK */
+    height: 68px;      /* ⭐ DAHA FERAH */
+
+    margin: 0 auto 18px auto; /* ⭐ ORTALAR + ALT BOŞLUK */
+
     background-color: #ffffff !important;
     border: 1px solid var(--border-soft) !important;
-    border-radius: 8px !important;
+    border-radius: 14px !important;
 
-    padding: 12px 14px !important;
-    font-size: 15px;
+    padding: 16px 20px !important;
+    font-size: 17px;
     color: var(--text-main);
 }
 
-.form-control::placeholder {
-    color: #a0a0a0;
-}
 
+/* Focus */
 .form-control:focus,
 .form-select:focus {
     border-color: var(--primary-soft) !important;
-    box-shadow: 0 0 0 1px rgba(79, 110, 247, 0.2);
+    box-shadow: 0 0 0 2px rgba(79, 110, 247, 0.18);
 }
 
 /* =====================================================
-   BUTON (KURUMSAL AKSAN)
+   BUTON
    ===================================================== */
 .btn-primary {
     background-color: var(--primary-soft) !important;
     border: none !important;
-    border-radius: 8px;
+    border-radius: 10px;
 
-    padding: 11px 28px;
+    padding: 13px 32px;
+    font-size: 15px;
     font-weight: 500;
 }
 
@@ -97,21 +133,18 @@
 }
 
 /* =====================================================
-   FOOTER (MINIMAL KURUMSAL)
+   FOOTER (ŞEFFAF & SOFT)
    ===================================================== */
 footer {
     margin-top: auto;
-    background-color: #ffffff !important;
     border-top: 1px solid var(--border-soft);
+    background: transparent !important;
 }
 
 /* Bootstrap bastır */
 footer.bg-light,
 footer.bg-white,
-footer.py-5 {
-    background: transparent !important;
-}
-
+footer.py-5,
 footer .container,
 footer .container-fluid {
     background: transparent !important;
@@ -135,7 +168,12 @@ footer a:hover {
    ===================================================== */
 @media (max-width: 768px) {
     .bg-light.rounded-4 {
-        margin: 32px 16px;
         padding: 32px !important;
+    }
+
+    .bg-light.rounded-4 .form-control,
+    .bg-light.rounded-4 .form-select {
+        max-width: 100%;
+        height: 64px;
     }
 }
