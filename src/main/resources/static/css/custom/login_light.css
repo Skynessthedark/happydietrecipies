@@ -48,11 +48,10 @@
 .bg-light.rounded-4 {
     background-color: #ffffff !important;
     border-radius: 14px !important;
-
     box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08);
 
-    max-width: 700px; /* FORM GENİŞ */
-    width: 100%;
+    max-width: 800px; /* Kartın kendisini biraz daha genişlettim */
+    width: 95%;
     margin: 56px auto;
     padding: 44px !important;
 }
@@ -92,16 +91,14 @@
    ===================================================== */
 .bg-light.rounded-4 .form-control,
 .bg-light.rounded-4 .form-select {
-    width: 100%;
-    max-width: 560px;  /* ⭐ GÖZ YORMAYAN GENİŞLİK */
-    height: 68px;      /* ⭐ DAHA FERAH */
-
-    margin: 0 auto 18px auto; /* ⭐ ORTALAR + ALT BOŞLUK */
+    width: 100% !important; /* Input kutuyu tam kaplasın */
+    max-width: 100% !important;
+    height: 68px;
+    margin: 0 auto 18px auto;
 
     background-color: #ffffff !important;
     border: 1px solid var(--border-soft) !important;
     border-radius: 14px !important;
-
     padding: 16px 20px !important;
     font-size: 17px;
     color: var(--text-main);
