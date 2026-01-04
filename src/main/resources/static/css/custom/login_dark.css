@@ -33,13 +33,38 @@
    FORM KARTI (MERKEZ – BEYAZ – SHADOW)
    ===================================================== */
 .bg-light.rounded-4 {
-    background-color: #ffffff !important;
-    border-radius: 16px !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    max-width: 620px;
-    margin: 40px auto;
-    padding: 45px !important;
+    /* 1. Transparan Arka Plan: rgba(siyah, siyah, siyah, opaklık) */
+    /* 0.6 değerini azaltarak (örneğin 0.4) daha şeffaf yapabilirsin */
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    background-image: none !important; /* Eski lineer gradyanı temizler */
+
+    /* 2. Cam Efekti (Bulanıklaştırma): Arkadaki resmin detaylarını yumuşatır */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* 3. İnce Kenarlık: Formun sınırlarını zarifçe belli eder */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    /* 4. Tasarımın Diğer Özellikleri */
+    border-radius: 20px !important; /* Köşeleri biraz daha yumuşattık */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    max-width: 700px;
+    width: 100%;
+    margin: 56px auto;
+    padding: 44px !important;
 }
+
+/* Transparan zeminde yazıların 'patlaması' için bu eklemeyi mutlaka yapmalısın: */
+/*
+.bg-light.rounded-4 h1,
+.bg-light.rounded-4 h2,
+.bg-light.rounded-4 label,
+.bg-light.rounded-4 p {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }*//* Yazı okunabilirliğini garantiye alır */
+
+
+
 
 /* =====================================================
    INPUT & SELECT TASARIMI
