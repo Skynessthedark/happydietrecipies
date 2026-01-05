@@ -27,26 +27,31 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-9">
                 <div th:replace="~{layout/messages :: submit-messages}"></div>
-                <form id="signupForm" name="signupForm" th:action="@{/signup.html}" method="post">
+                <form id="signupForm" name="signupForm" th:action="@{/signup}" th:object="${user}" method="post" enctype="multipart/form-data">
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="email" type="email" name="username" required />
+                        <input class="form-control" id="email" type="email" name="email" th:field="*{email}" required />
                         <label for="email"><span class="text-danger">*</span> Email</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="userName" type="text" name="username" required />
+                        <input class="form-control" id="userName" type="text" name="username" th:field="*{username}" required />
                         <label for="userName"><span class="text-danger">*</span> User Name</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" name="password" required />
+                        <input class="form-control" id="password" type="password" name="password" th:field="*{password}" required />
                         <label for="password"><span class="text-danger">*</span> Password</label>
                     </div>
 
                     <div class="form-floating mb-3">
                         <input class="form-control" id="rePassword" type="password" name="rePassword" required />
                         <label for="rePassword"><span class="text-danger">*</span> Please re-enter your password</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <textarea class="form-control" id="bio" name="bio" th:field="*{bio}" placeholder="Bio" style="height: 120px"></textarea>
+                        <label for="bio">biography</label>
                     </div>
 
                     <div class="mb-4">
@@ -65,9 +70,7 @@
                         <input type="file" id="recipeFile" name="recipeFile" accept="image/*" style="display: none;">
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Signup</button>
-                    </div>
+                    <div class="d-grid" th:replace="~{layout/buttons :: submit-button('Signup')}"></div>
                 </form>
             </div>
         </div>

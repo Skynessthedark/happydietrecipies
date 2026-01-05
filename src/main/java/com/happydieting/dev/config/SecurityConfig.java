@@ -25,13 +25,13 @@ public class SecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
 
     private static final String LOGIN_PROCESSING_URL = "/login";
-    private static final String API_PREFIX= "/api/";
+    private static final String API_PREFIX = "/api/";
     private static final String API_PROCESSING_URL = API_PREFIX + "**";
-    private static final String[] WEB_WHITELIST = {"/css/**", "/images/**", "/js/**"};
+    private static final String[] WEB_WHITELIST = {"/css/**", "/images/**", "/js/**", "/signup", "/signup/**", "/login"};
     private static final String[] API_WHITELIST = {"/api/auth/**", "/api/account/register"};
     public static final String REGISTER = "/register";
 
-
+    public static final String SIGNUP = "/signup";
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter) {
         this.customUserDetailsService = userDetailsService;
         this.jwtTokenFilter = jwtTokenFilter;

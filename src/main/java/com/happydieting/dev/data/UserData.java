@@ -17,6 +17,11 @@ public class UserData extends ItemData {
     private String fullName;
     private String email;
     private String password;
-    //private byte[] avatar;
+    private String repassword;
     private String bio;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] avatar;
+
 }
