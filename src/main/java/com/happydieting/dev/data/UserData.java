@@ -23,5 +23,4 @@ public class UserData extends ItemData {
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] avatar;
-
 }
