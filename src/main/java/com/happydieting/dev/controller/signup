@@ -53,9 +53,6 @@ public class SignupController {
             userModel.setAvatar(file.getBytes());
         }
 
-        userModel.setUsername(userModel.getEmail());
-        userModel.setFullName(userModel.getUsername());
-        userModel.setBio(userModel.getBio());
         userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
         userRepository.save(userModel);
 
