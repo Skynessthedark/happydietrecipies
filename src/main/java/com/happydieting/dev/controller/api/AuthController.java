@@ -1,6 +1,9 @@
 package com.happydieting.dev.controller.api;
 
 import com.happydieting.dev.data.AuthData;
+import com.happydieting.dev.data.RegisterData;
+import com.happydieting.dev.model.UserModel;
+import com.happydieting.dev.repository.UserRepository;
 import com.happydieting.dev.security.service.CustomUserDetailsService;
 import com.happydieting.dev.security.util.JwtUtil;
 import org.springframework.http.HttpStatus;
@@ -8,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -23,14 +24,23 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil,
+                          CustomUserDetailsService customUserDetailsService,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.customUserDetailsService = customUserDetailsService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    // ===================== LOGIN =====================
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthData authRequest) {
         try {
@@ -45,5 +55,34 @@ public class AuthController {
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         return ResponseEntity.ok(Collections.singletonMap("token", jwt));
+    }
+
+    // ===================== REGISTER =====================
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterData data) {
+
+        if (userRepository.existsByUsername(data.getUsername())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username already exists");
+        }
+
+        if (userRepository.existsByEmail(data.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
+
+        UserModel user = new UserModel();
+        user.setUsername(data.getUsername());
+        user.setEmail(data.getEmail());
+        user.setFullName(data.getFullName());
+        user.setPassword(passwordEncoder.encode(data.getPassword()));
+
+        userRepository.save(user);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("User registered successfully");
     }
 }

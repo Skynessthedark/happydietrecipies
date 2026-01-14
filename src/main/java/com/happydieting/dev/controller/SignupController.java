@@ -28,38 +28,28 @@ public class SignupController {
         return "signup";
     }
 
+
     @PostMapping
-    public String registerUser(@ModelAttribute("user") UserModel userModel,
-                               @RequestParam("rePassword") String rePassword,
-                               @RequestParam("recipeFile") MultipartFile file,
-                               Model model) throws IOException {
+    public String register(UserModel user,
+                           @RequestParam("rePassword") String rePassword,
+                           Model model) {
 
-        if (userRepository.existsByUsername(userModel.getUsername())) {
-            model.addAttribute("error", "Username already exists");
-            return "signup";
-        }
-
-        if (userRepository.existsByEmail(userModel.getEmail())) {
-            model.addAttribute("error", "Email already exists");
-            return "signup";
-        }
-
-        if (!userModel.getPassword().equals(rePassword)) {
+        if (!user.getPassword().equals(rePassword)) {
             model.addAttribute("error", "Passwords do not match");
             return "signup";
         }
 
-        if (!file.isEmpty()) {
-            userModel.setAvatar(file.getBytes());
+        if (userRepository.existsByEmail(user.getEmail())) {
+            model.addAttribute("error", "Email already exists");
+            return "signup";
         }
+        user.setBio(user.getBio());
+        user.setFullName(user.getFullName());
 
-        userModel.setUsername(userModel.getEmail());
-        userModel.setFullName(userModel.getUsername());
-        userModel.setBio(userModel.getBio());
-        userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
-        userRepository.save(userModel);
+        user.setUsername(user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return "redirect:/login?success=true";
+        userRepository.save(user);
+        return "redirect:/login";
     }
-
 }
