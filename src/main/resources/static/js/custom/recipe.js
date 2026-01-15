@@ -38,25 +38,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let formData = new FormData(this);
 
+        let formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+
         let categoryValues = document.getElementById('categoryCodes').value.split(',');
-        const categories = categoryValues.map(categoryValue => {
-        return {
-            code: categoryValue
-        }});
-        formData.append('categories', JSON.stringify(categories));
+        formObject['categories'] = categoryValues.map(categoryValue => {
+            return {
+                code: categoryValue
+            }
+        });
 
         let ingredientValues = document.getElementById('ingredientCodes').value.split(',');
-        const ingredients = ingredientValues.map(ingredientValue => {
+        formObject['ingredients'] = ingredientValues.map(ingredientValue => {
             return {
                 code: ingredientValue
-            }});
-        formData.append('ingredients', JSON.stringify(ingredients));
+            }
+        });
 
         let servingUnitValue = document.getElementById('servingUnit').value;
-        const servingUnit = {
+        formObject['servingUnit'] = {
             code: servingUnitValue
         };
-        formData.append('servingUnit', JSON.stringify(servingUnit));
 
         let nutritionTypeEls = document.querySelectorAll('.nutritionType');
         let nutritionalValues = [];
@@ -72,21 +76,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
-        formData.append('nutritionalValues', JSON.stringify(nutritionalValues));
+        formObject['nutritionalValues'] = nutritionalValues;
 
-        var url = this.getAttribute('action');
-        return sendRecipeForm(formData, url);
+        let url = this.getAttribute('action');
+        return sendRecipeForm(formObject, url);
     });
 
 });
 
-function sendRecipeForm(formData, url) {
+function sendRecipeForm(formObject, url) {
     let blobForm = new FormData();
-    blobForm.append("recipeForm", new Blob([JSON.stringify(formData)], { type: "application/json" }));
+    blobForm.append("recipeForm", new Blob([JSON.stringify(formObject)], { type: "application/json" }));
     blobForm.append('image', document.getElementById('recipeFile').files[0]);
     $.ajax({
         type: "POST",
-        url: url,
+        url: SERVER_PATH + url,
         data: blobForm,
         cache: false,
         async: false,
@@ -94,8 +98,8 @@ function sendRecipeForm(formData, url) {
         processData: false,
         dataType: "json",
         success: function (data) {
-            if(data !== null && data.success === true){
-                window.location.href = "/";
+            if(data !== null && data.status === true){
+                window.location.href = SERVER_PATH + "/";
                 return true;
             }
             else{

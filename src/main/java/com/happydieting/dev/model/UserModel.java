@@ -3,6 +3,8 @@ package com.happydieting.dev.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,8 +14,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USER")
-@EqualsAndHashCode(callSuper = false)
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Getter
+@Setter
 public class UserModel extends ItemModel implements UserDetails {
 
     private String username;

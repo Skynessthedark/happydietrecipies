@@ -1,14 +1,21 @@
 package com.happydieting.dev.data;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GenericData {
     private Long id;
     private String name;
     private String code;
+
+    public GenericData(String code) {
+        this.code = code;
+    }
+
+    public GenericData(String name, String code) {
+        this.name = name;
+        this.code = code;
+    }
 }

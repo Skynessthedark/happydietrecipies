@@ -4,12 +4,15 @@ import com.happydieting.dev.listener.IngredientAuditListener;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Getter
+@Setter
 @Entity
 @Table(name = "INGREDIENT")
 @EntityListeners(value = {IngredientAuditListener.class})

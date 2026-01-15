@@ -4,11 +4,14 @@ import com.happydieting.dev.listener.RecipeAuditListener;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Getter
+@Setter
 @Entity
 @Table(name = "RECIPE")
 @EntityListeners(RecipeAuditListener.class)
@@ -35,19 +38,19 @@ public class RecipeModel extends ItemModel{
     @JoinColumn
     private NutritionUnitModel servingUnit;
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<NutritionalValueModel> nutritionalValues;
 
     @ManyToMany
     @JoinTable(name = "RECIPE2INGREDIENT_REL",
-            joinColumns = {@JoinColumn(name = "recipe_id")},
-            inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})
+            joinColumns = {@JoinColumn(name = "recipe_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "ingredient_id", referencedColumnName = "id")})
     private Set<IngredientModel> ingredients;
 
     @ManyToMany
     @JoinTable(
             name = "RECIPE2CATEGORY_REL",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+            joinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<CategoryModel> categories;
 }

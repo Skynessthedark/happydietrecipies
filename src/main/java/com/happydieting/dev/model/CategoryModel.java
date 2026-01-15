@@ -4,12 +4,15 @@ import com.happydieting.dev.listener.CategoryAuditListener;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @EntityListeners({CategoryAuditListener.class})
 @Table(name = "CATEGORY")
@@ -33,10 +36,10 @@ public class CategoryModel extends ItemModel{
             inverseJoinColumns = @JoinColumn(name = "subcategory_id"))
     private Set<CategoryModel> subcategories = new HashSet<>();
 
-    @ManyToMany(mappedBy = "subcategories", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "subcategories", cascade = CascadeType.DETACH)
     private Set<CategoryModel> parentCategories = new HashSet<>();
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "categories")
     private Set<IngredientModel> ingredients = new HashSet<>();
 
 }

@@ -22,7 +22,7 @@
     </header>
 
     <div class="bg-light rounded-4 py-5 px-4 px-md-5">
-        <form id="recipeForm" name="recipeForm" th:action="@{/recipes/new}" th:object="${recipe}" method="post">
+        <form id="recipeForm" name="recipeForm" th:action="@{/recipes/new}" th:object="${recipeForm}" method="post">
             <div class="text-start mb-2">
                 <p class="fw-lighter text-muted mb-0">(<span class="required-field">*</span>)Please fill in the required fields.</p>
             </div>

@@ -59,7 +59,10 @@ public class SecurityConfig {
                         .logoutSuccessUrl(LOGIN_PROCESSING_URL + "?logout=true")
                         .permitAll()
                 )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(sess -> {
+                    sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+                    sess.maximumSessions(1);
+                })
                 .build();
     }
 

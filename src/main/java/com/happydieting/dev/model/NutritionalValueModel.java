@@ -3,9 +3,12 @@ package com.happydieting.dev.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Getter
+@Setter
 @Entity
 @Table(name = "NUTRITIONAL_VALUES", uniqueConstraints = { @UniqueConstraint(columnNames = { "recipe_id", "type_id" }) })
 public class NutritionalValueModel extends ItemModel{
@@ -18,7 +21,7 @@ public class NutritionalValueModel extends ItemModel{
     private NutritionTypeModel type;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn //(nullable = false)
     private NutritionUnitModel unit;
 
     @ManyToOne
