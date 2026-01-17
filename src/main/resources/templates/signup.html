@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <th:block th:replace="~{layout/main :: layout-head}"></th:block>
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" th:href="@{/css/custom/signup_light.css}">
+</head>
+<body class="d-flex flex-column min-vh-100 imgBackgroundFood">
+<main class="flex-grow-1">
+    <div th:replace="~{layout/main :: navbar}"></div>
+
+    <header class="py-5">
+        <div class="container px-5">
+            <div class="text-center">
+                <h1 class="display-3 fw-bolder mb-5">
+                    <span class="text-gradient d-inline">New Registration Happy Diet Recipes</span>
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+        <div class="text-center mb-5">
+            <p class="lead fw-normal text-muted mb-0">Signup to explore more recipes within your taste!</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-9">
+                <div th:replace="~{layout/messages :: submit-messages}"></div>
+                <form id="signupForm" name="signupForm" th:action="@{/signup}" th:object="${user}" method="post" enctype="multipart/form-data">
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="email" type="email" name="email" th:field="*{email}" required />
+                        <label for="email"><span class="text-danger">*</span> Email</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="userName" type="text" name="username" th:field="*{username}" required />
+                        <label for="userName"><span class="text-danger">*</span> User Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="password" type="password" name="password" th:field="*{password}" required />
+                        <label for="password"><span class="text-danger">*</span> Password</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="rePassword" type="password" name="rePassword" required />
+                        <label for="rePassword"><span class="text-danger">*</span> Please re-enter your password</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <textarea class="form-control" id="bio" name="bio" th:field="*{bio}" placeholder="Bio" style="height: 120px"></textarea>
+                        <label for="bio">biography</label>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Profile Image</label>
+                        <div class="image-upload-area" id="recipeImageArea" style="position: relative;">
+                            <div id="recipeImagePreview" class="text-center">
+                                <i class="bi bi-cloud-upload display-4 text-muted"></i>
+                                <p class="mt-2 text-muted">To upload image drag or select from file system...</p>
+                                <small class="text-muted">PNG, JPG, GIF (Max: 2MB)</small>
+                            </div>
+                            <img id="recipePreviewImg" class="preview-image mt-3" style="display: none; max-width: 100%;">
+                            <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" style="display:none;">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <input type="file" id="recipeFile" name="recipeFile" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="d-grid" th:replace="~{layout/buttons :: submit-button('Signup')}"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+<script th:replace="~{layout/main :: scripts}"></script>
+</body>
+</html>
