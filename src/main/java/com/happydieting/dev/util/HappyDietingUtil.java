@@ -2,13 +2,10 @@ package com.happydieting.dev.util;
 
 import com.happydieting.dev.data.response.ResponseData;
 
-import java.util.UUID;
-
 public class HappyDietingUtil {
 
-    public static String generateUUID() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString();
+    private HappyDietingUtil() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static ResponseData generateResponse(boolean status, String message) {

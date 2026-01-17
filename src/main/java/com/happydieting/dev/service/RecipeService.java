@@ -1,11 +1,13 @@
 package com.happydieting.dev.service;
 
 import com.happydieting.dev.data.*;
+import com.happydieting.dev.enums.RecipeMediaPath;
 import com.happydieting.dev.model.*;
 import com.happydieting.dev.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,9 +22,10 @@ public class RecipeService {
     private final NutritionTypeRepository nutritionTypeRepository;
     private final UserRepository userRepository;
     private final NutritionalValueRepository nutritionalValueRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository, NutritionUnitRepository nutritionUnitRepository, CategoryRepository categoryRepository, IngredientRepository ingredientRepository, NutritionTypeRepository nutritionTypeRepository, UserRepository userRepository, NutritionalValueRepository nutritionalValueRepository) {
+    public RecipeService(RecipeRepository recipeRepository, NutritionUnitRepository nutritionUnitRepository, CategoryRepository categoryRepository, IngredientRepository ingredientRepository, NutritionTypeRepository nutritionTypeRepository, UserRepository userRepository, NutritionalValueRepository nutritionalValueRepository, MediaService mediaService) {
         this.recipeRepository = recipeRepository;
         this.nutritionUnitRepository = nutritionUnitRepository;
         this.categoryRepository = categoryRepository;
@@ -30,6 +33,7 @@ public class RecipeService {
         this.nutritionTypeRepository = nutritionTypeRepository;
         this.userRepository = userRepository;
         this.nutritionalValueRepository = nutritionalValueRepository;
+        this.mediaService = mediaService;
     }
 
 
@@ -62,10 +66,12 @@ public class RecipeService {
         if(CollectionUtils.isEmpty(ingredientModelSet)) return false;
         newRecipe.setIngredients(ingredientModelSet);
 
-        //TODO: image upload required
-        //private byte[] image;
-
         recipeRepository.save(newRecipe);
+
+        mediaService.saveMedia(newRecipe.getId(), RecipeModel.class,
+                recipeForm.getImage(),
+                RecipeMediaPath.RECIPE_IMAGE_NAME.resolve(newRecipe.getCode()),
+                RecipeMediaPath.RECIPE_IMAGE_URL.resolve(newRecipe.getCode()));
 
         createNutritionalValues(newRecipe, recipeForm.getNutritionalValues());
 
@@ -118,5 +124,14 @@ public class RecipeService {
                 || nutritionalValue.getNutritionType() == null
                 || nutritionalValue.getNutritionType().getCode() == null;
         return !isNotValid;
+    }
+
+    public MediaModel getRecipeImage(String recipeCode) {
+        if(StringUtils.hasText(recipeCode)){
+            Optional<RecipeModel> recipeModelOpt = recipeRepository.findRecipeModelByCode(recipeCode);
+            if(recipeModelOpt.isPresent())
+                return mediaService.getMediaByOwner(recipeModelOpt.get().getId(), RecipeModel.class).orElse(null);
+        }
+        return null;
     }
 }

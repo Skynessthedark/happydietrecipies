@@ -1,26 +1,24 @@
 package com.happydieting.dev.controller;
 
-import com.happydieting.dev.data.*;
+import com.happydieting.dev.data.RecipeData;
+import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.data.response.ResponseData;
-import com.happydieting.dev.model.NutritionTypeModel;
-import com.happydieting.dev.model.RecipeModel;
 import com.happydieting.dev.repository.NutritionTypeRepository;
 import com.happydieting.dev.repository.NutritionUnitRepository;
 import com.happydieting.dev.security.service.SessionService;
 import com.happydieting.dev.service.RecipeService;
 import com.happydieting.dev.util.HappyDietingUtil;
+import com.happydieting.dev.util.MediaUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/recipes")
@@ -60,7 +58,13 @@ public class RecipeController {
         if(owner == null) return HappyDietingUtil.generateResponse(false, "No session user.");
 
         recipeForm.setOwner(owner);
+        recipeForm.setImage(image);
         boolean isSaved = recipeService.create(recipeForm);
         return HappyDietingUtil.generateResponse(isSaved, "Recipe created successfully.");
+    }
+
+    @GetMapping(value = "/{recipeCode}/image")
+    public void getRecipeImage(@PathVariable("recipeCode") String recipeCode, HttpServletResponse response) throws IOException {
+        MediaUtil.printMedia(recipeService.getRecipeImage(recipeCode), response);
     }
 }

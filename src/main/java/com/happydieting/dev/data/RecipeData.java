@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +18,6 @@ public class RecipeData extends ItemData {
     private String description;
     @NotBlank(message = "Recipe cannot be empty.")
     private String recipe;
-    //private byte[] image;
     private String tips;
     @NotNull(message = "Serving Amount cannot be empty.")
     private double servingAmount;
@@ -26,4 +26,6 @@ public class RecipeData extends ItemData {
     private List<NutritionalValueData> nutritionalValues;
     private List<IngredientData> ingredients;
     private List<CategoryData> categories;
+    private String imageUrl;
+    private transient MultipartFile image;
 }
