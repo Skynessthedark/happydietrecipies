@@ -1,0 +1,35 @@
+.required-field{
+    color: #dc3545;
+}
+
+.search-result-div{
+    display:none;
+    max-height:200px;
+    overflow-y:auto;
+}
+
+.image-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: border-color 0.2s, background-color 0.2s;
+    cursor: pointer;
+}
+
+.image-upload-area:hover {
+    border-color: #667eea;
+    background-color: #f8f9ff;
+}
+
+.image-upload-area.dragover {
+    border-color: #667eea;
+    background-color: #f8f9ff;
+}
+
+.preview-image {
+    max-width: 315px;
+    max-height: 315px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

@@ -195,8 +195,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe1.setDescription("Test1Tarif");
         recipe1.setTips("Örnek1");
         recipe1.setRecipe("Tariff");
-        recipe1.setNutritionValue(100.0);
-        recipe1.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("GR").get());
+        recipe1.setServingAmount(100.0);
+        recipe1.setServingUnit(nutritionUnitRepository.findNutritionUnitModelByCode("GR").get());
         recipe1.setIngredients(ingredientModels);
 
         Set<CategoryModel> categories1 = new HashSet<>();
@@ -212,8 +212,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         recipe2.setDescription("Test2Tarif");
         recipe2.setTips("Örnek2");
         recipe2.setRecipe("Tariff");
-        recipe2.setNutritionValue(1.0);
-        recipe2.setNutritionUnit(nutritionUnitRepository.findNutritionUnitModelByCode("PERSON").get());
+        recipe2.setServingAmount(1.0);
+        recipe2.setServingUnit(nutritionUnitRepository.findNutritionUnitModelByCode("PERSON").get());
         recipe2.setIngredients(ingredientModels);
 
         Set<CategoryModel> categories2 = new HashSet<>();
