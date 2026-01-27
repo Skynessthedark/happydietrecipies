@@ -65,7 +65,8 @@ public class SignupController {
             try {
                 MediaModel media = new MediaModel();
 
-                media.setCode(UUID.randomUUID().toString()); // 🔥 ZORUNLU
+                // Tekrar etme olasılığı sunan bir kimlik oluşturur.
+                media.setCode(UUID.randomUUID().toString());
                 media.setFileName(image.getOriginalFilename());
                 media.setContentType(image.getContentType());
                 media.setContent(image.getBytes());
