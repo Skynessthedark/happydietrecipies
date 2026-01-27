@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "USER")
@@ -20,10 +19,14 @@ import java.util.Set;
 public class UserModel extends ItemModel implements UserDetails {
 
     private String username;
+    private String uname;
     private String fullName;
     private String email;
     private String password;
-    private byte[] avatar;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private MediaModel image;
+
     private String bio;
 
     @Override
@@ -45,4 +48,8 @@ public class UserModel extends ItemModel implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
 }
