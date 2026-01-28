@@ -1,6 +1,7 @@
 package com.happydieting.dev.config;
 
 import com.happydieting.dev.security.filter.JwtTokenFilter;
+import com.happydieting.dev.security.handler.CustomAuthenticationSuccessHandler;
 import com.happydieting.dev.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     private static final String LOGIN_PROCESSING_URL = "/login";
     private static final String API_PREFIX= "/api/";
@@ -32,9 +34,11 @@ public class SecurityConfig {
     public static final String REGISTER = "/register";
 
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter,
+                          CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
         this.customUserDetailsService = userDetailsService;
         this.jwtTokenFilter = jwtTokenFilter;
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -51,7 +55,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl(LOGIN_PROCESSING_URL + "?error=true")
                         .permitAll()
                 )

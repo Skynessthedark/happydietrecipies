@@ -2,8 +2,10 @@ package com.happydieting.dev.data;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class NutritionalValueData {
+public class NutritionalValueData implements Serializable {
 
     private String id;
     private Double value;

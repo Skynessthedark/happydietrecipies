@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html th:lang="${#locale.language}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Happy Diet Recipes</title> <!--th:text="${pageTitle} + ' - ' + #{common.systemName}"-->
     <!-- Styles Fragment -->
@@ -68,7 +70,8 @@
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                        data-bs-toggle="dropdown">
-                        <span sec:authentication="name"></span>
+                        <span th:if="${session.USER_INFO != null and session.USER_INFO.fullName != null}"
+                                th:text="${session.USER_INFO.fullName}"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/profile}">My Profile</a></li>

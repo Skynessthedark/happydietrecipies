@@ -1,46 +1,96 @@
 package com.happydieting.dev.security.service;
 
-import com.happydieting.dev.data.UserData;
+import com.happydieting.dev.constant.SessionConstant;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
+import com.happydieting.dev.security.data.SessionUserInfo;
 import com.happydieting.dev.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class SessionService {
 
-    private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
-    private static final String USERNAME = "username";
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
     private final UserService userService;
 
-    public SessionService(UserRepository userRepository, UserService userService) {
+    public SessionService(UserRepository userRepository, ModelMapper modelMapper, UserService userService) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
         this.userService = userService;
     }
 
-    public Authentication getSession(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        SecurityContext ctx = (SecurityContext) session.getAttribute(SPRING_SECURITY_CONTEXT);
-        return ctx.getAuthentication();
+    private HttpServletRequest getRequest() {
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return (attrs != null) ? attrs.getRequest() : null;
     }
 
-    public boolean isAuthenticated(HttpServletRequest request) {
-        return getSession(request) != null;
+
+    private HttpSession getSession(boolean create) {
+        HttpServletRequest request = getRequest();
+        return (request != null) ? request.getSession(create) : null;
     }
 
-    public UserModel getSessionUser(HttpServletRequest request) {
-        if (!isAuthenticated(request)) return null;
-
-        HttpSession session = request.getSession();
-        return userRepository.findByUsername((String) session.getAttribute(USERNAME)).orElse(null);
+    public void setAttribute(String key, Object value) {
+        HttpSession session = getSession(true);
+        if (session != null) {
+            session.setAttribute(key, value);
+        }
     }
 
-    public UserData getSessionUserData(HttpServletRequest request) {
-        return userService.convertModel2Data(getSessionUser(request));
+    public Object getAttribute(String key) {
+        HttpSession session = getSession(false);
+        return (session != null) ? session.getAttribute(key) : null;
+    }
+
+    public void removeAttribute(String key) {
+        HttpSession session = getSession(false);
+        if (session != null) {
+            session.removeAttribute(key);
+        }
+    }
+
+    public void invalidateSession() {
+        HttpSession session = getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+    }
+
+    public boolean isAuthenticated() {
+        return getSession(true) != null;
+    }
+
+    public void setSessionUser(String username, Collection<? extends GrantedAuthority> authorities) {
+        //TODO: after role management, set authorities
+
+        HttpSession session = getSession(true);
+        if (session != null) {
+            Optional<UserModel> userModelOpt = userRepository.findByUsername(username);
+            if(userModelOpt.isPresent() && userModelOpt.get().isEnabled()) {
+                session.setAttribute(SessionConstant.USERNAME, username);
+
+                UserModel userModel = userModelOpt.get();
+                session.setAttribute(SessionConstant.USER_INFO, modelMapper.map(userModel, SessionUserInfo.class));
+            }
+        }
+    }
+
+    public UserModel getSessionUser() {
+        HttpSession session = getSession(true);
+        if (session != null) {
+            String username = (String) session.getAttribute(SessionConstant.USERNAME);
+            return userRepository.findByUsername(username).orElse(null);
+        }
+        return null;
     }
 }

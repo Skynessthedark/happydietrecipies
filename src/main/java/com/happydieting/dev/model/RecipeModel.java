@@ -24,8 +24,9 @@ public class RecipeModel extends ItemModel{
     private String description;
     @Column(nullable = false)
     private String recipe;
-    //@Column(nullable = false)
-    private byte[] image;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private MediaModel image;
 
     private String tips;
     private Double servingAmount;

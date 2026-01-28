@@ -1,26 +1,29 @@
 package com.happydieting.dev.controller;
 
-import com.happydieting.dev.data.*;
+import com.happydieting.dev.constant.SessionConstant;
+import com.happydieting.dev.data.RecipeData;
+import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.data.response.ResponseData;
-import com.happydieting.dev.model.NutritionTypeModel;
-import com.happydieting.dev.model.RecipeModel;
+import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.NutritionTypeRepository;
 import com.happydieting.dev.repository.NutritionUnitRepository;
+import com.happydieting.dev.security.data.SessionUserInfo;
 import com.happydieting.dev.security.service.SessionService;
 import com.happydieting.dev.service.RecipeService;
+import com.happydieting.dev.service.UserService;
 import com.happydieting.dev.util.HappyDietingUtil;
+import com.happydieting.dev.util.MediaUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/recipes")
@@ -30,12 +33,14 @@ public class RecipeController {
     private final NutritionTypeRepository nutritionTypeRepository;
     private final RecipeService recipeService;
     private final SessionService sessionService;
+    private final UserService userService;
 
-    public RecipeController(NutritionUnitRepository nutritionUnitRepository, NutritionTypeRepository nutritionTypeRepository, RecipeService recipeService, SessionService sessionService) {
+    public RecipeController(NutritionUnitRepository nutritionUnitRepository, NutritionTypeRepository nutritionTypeRepository, RecipeService recipeService, SessionService sessionService, UserService userService) {
         this.nutritionUnitRepository = nutritionUnitRepository;
         this.nutritionTypeRepository = nutritionTypeRepository;
         this.recipeService = recipeService;
         this.sessionService = sessionService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -54,13 +59,18 @@ public class RecipeController {
     @PostMapping(value = "/new", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseBody
     public ResponseData addNewRecipe(@Valid @RequestPart("recipeForm") RecipeData recipeForm,
-                                                     @RequestPart(value = "image", required = false) final MultipartFile image,
-                                                     HttpServletRequest request) {
-        final UserData owner = sessionService.getSessionUserData(request);
+                                                     @RequestPart(value = "image", required = false) final MultipartFile image) {
+        final UserData owner = userService.convertModel2Data(sessionService.getSessionUser());
         if(owner == null) return HappyDietingUtil.generateResponse(false, "No session user.");
 
         recipeForm.setOwner(owner);
+        recipeForm.setImage(image);
         boolean isSaved = recipeService.create(recipeForm);
         return HappyDietingUtil.generateResponse(isSaved, "Recipe created successfully.");
+    }
+
+    @GetMapping(value = "/{recipeCode}/image")
+    public void getRecipeImage(@PathVariable("recipeCode") String recipeCode, HttpServletResponse response) throws IOException {
+        MediaUtil.printMedia(recipeService.getRecipeImage(recipeCode), response);
     }
 }
