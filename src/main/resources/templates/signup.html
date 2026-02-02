@@ -31,18 +31,18 @@
                       enctype="multipart/form-data">
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="email" type="email" name="email" th:field="*{email}" required/>
+                        <input class="form-control" id="email" type="email" name="email" th:field="*{userData.email}" required/>
                         <label for="email"><span class="text-danger">*</span> Email</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="userName" type="text" name="uname" th:field="*{uname}"
+                        <input class="form-control" id="userName" type="text" name="username" th:field="*{userData.username}"
                                required/>
                         <label for="userName"><span class="text-danger">*</span> User Name</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" name="password" th:field="*{password}"
+                        <input class="form-control" id="password" type="password" name="password" th:field="*{userData.password}"
                                required/>
                         <label for="password"><span class="text-danger">*</span> Password</label>
                     </div>
@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="form-floating mb-4">
-                        <textarea class="form-control" id="bio" name="bio" th:field="*{bio}" placeholder="Bio"
+                        <textarea class="form-control" id="bio" name="bio" th:field="*{userData.bio}" placeholder="Bio"
                                   style="height: 120px"></textarea>
                         <label for="bio">biography</label>
                     </div>

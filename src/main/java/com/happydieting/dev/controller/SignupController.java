@@ -1,8 +1,11 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.data.RegisterData;
+import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.model.MediaModel;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
+import com.happydieting.dev.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,21 +22,50 @@ import java.util.UUID;
 @RequestMapping("/signup")
 public class SignupController {
 
+    private final UserService userService;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public SignupController(UserRepository userRepository,
-                            PasswordEncoder passwordEncoder) {
+    public SignupController(UserService userService, UserRepository userRepository) {
+        this.userService = userService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
     public String getSignupPage(Model model) {
-        model.addAttribute("registerForm", new UserModel());
+        model.addAttribute("registerForm", new RegisterData());
         return "signup";
     }
 
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String register(
+            @Valid @ModelAttribute("registerForm") RegisterData registerForm,
+            BindingResult bindingResult,
+            @RequestParam("rePassword") String rePassword,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            Model model) {
+
+
+        if (registerForm.getUserData() != null &&
+                !registerForm.getUserData().getPassword().equals(rePassword)) {
+            bindingResult.rejectValue("userData.password", "error.password", "Şifreler uyuşmuyor.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
+
+        boolean isCreated = userService.createUser(registerForm, image);
+        if (isCreated) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("errorMessage", "Kayıt sırasında bir hata oluştu veya kullanıcı mevcut.");
+            return "signup";
+        }
+
+
+    }
+
+   /*
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String register(
             @Valid @ModelAttribute("registerForm") UserModel user,
@@ -83,4 +115,5 @@ public class SignupController {
         userRepository.save(user);
         return "redirect:/login";
     }
+   */
 }
