@@ -20,10 +20,8 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final MediaService mediaService;
-    private final PasswordEncoder passwordEncoder; // 1. PasswordEncoder eklendi
+    private final PasswordEncoder passwordEncoder;
 
-    // Constructor Injection (En temiz yöntem)
-    // @Lazy ekleyerek SecurityConfig ile oluşabilecek döngüyü kırıyoruz
     public UserService(ModelMapper modelMapper,
                        UserRepository userRepository,
                        MediaService mediaService,
@@ -42,7 +40,6 @@ public class UserService {
 
         UserData userData = registerForm.getUserData();
 
-        // Kullanıcı adı çakışma kontrolü
         if (userRepository.findByUsername(userData.getUsername()).isPresent()) {
             return false;
         }
@@ -53,7 +50,6 @@ public class UserService {
         newUser.setEmail(userData.getEmail());
         newUser.setBio(userData.getBio());
 
-        // 2. Şifreyi encode ederek (hashleyerek) set ediyoruz
         if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(userData.getPassword());
             newUser.setPassword(encodedPassword);
@@ -61,7 +57,6 @@ public class UserService {
             return false; // Şifresiz kullanıcı kaydedilemez
         }
 
-        // Kullanıcıyı kaydet (ID oluşması için)
         userRepository.save(newUser);
 
         // Profil resmi işlemleri
@@ -77,7 +72,7 @@ public class UserService {
     public UserData convertModel2Data(UserModel user) {
         if (Objects.isNull(user)) return null;
         UserData userData = modelMapper.map(user, UserData.class);
-        userData.setPassword(null); // Güvenlik için veri transfer nesnesinde şifreyi temizle
+        userData.setPassword(null);
         return userData;
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class UserData extends ItemData {
     private String username;
-    private String uname;
     private String fullName;
     private String email;
     private String password;
