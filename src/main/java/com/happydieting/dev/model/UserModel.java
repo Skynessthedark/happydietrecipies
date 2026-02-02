@@ -19,7 +19,6 @@ import java.util.List;
 public class UserModel extends ItemModel implements UserDetails {
 
     private String username;
-    private String uname;
     private String fullName;
     private String email;
     private String password;

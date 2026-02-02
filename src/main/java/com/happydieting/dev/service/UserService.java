@@ -2,6 +2,7 @@ package com.happydieting.dev.service;
 
 import com.happydieting.dev.data.RegisterData;
 import com.happydieting.dev.data.UserData;
+import com.happydieting.dev.enums.UserMediaPath;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
 import com.happydieting.dev.enums.RecipeMediaPath;
@@ -34,24 +35,22 @@ public class UserService {
 
     @Transactional
     public boolean createUser(RegisterData registerForm, MultipartFile image) {
-        if (registerForm == null || registerForm.getUserData() == null) {
+        if (registerForm == null || registerForm.getEmail() == null) {
             return false;
         }
 
-        UserData userData = registerForm.getUserData();
-
-        if (userRepository.findByUsername(userData.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(registerForm.getEmail()).isPresent()) {
             return false;
         }
 
         UserModel newUser = new UserModel();
-        newUser.setUsername(userData.getUsername());
-        newUser.setFullName(userData.getFullName());
-        newUser.setEmail(userData.getEmail());
-        newUser.setBio(userData.getBio());
+        newUser.setUsername(registerForm.getEmail());
+        newUser.setFullName(registerForm.getFullName());
+        newUser.setEmail(registerForm.getEmail());
+        newUser.setBio(registerForm.getBio());
 
-        if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
-            String encodedPassword = passwordEncoder.encode(userData.getPassword());
+        if (registerForm.getPassword() != null && !registerForm.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(registerForm.getPassword());
             newUser.setPassword(encodedPassword);
         } else {
             return false; // Şifresiz kullanıcı kaydedilemez
@@ -59,12 +58,9 @@ public class UserService {
 
         userRepository.save(newUser);
 
-        // Profil resmi işlemleri
-        if (image != null && !image.isEmpty()) {
-            mediaService.saveMedia(newUser.getId(), UserModel.class, image,
-                    RecipeMediaPath.RECIPE_IMAGE_NAME.resolve(newUser.getUsername()),
-                    RecipeMediaPath.RECIPE_IMAGE_URL.resolve(newUser.getUsername()));
-        }
+        mediaService.saveMedia(newUser.getId(), UserModel.class, image,
+                UserMediaPath.IMAGE_NAME.resolve(newUser.getUsername()),
+                UserMediaPath.IMAGE_URL.resolve(newUser.getUsername()));
 
         return true;
     }
