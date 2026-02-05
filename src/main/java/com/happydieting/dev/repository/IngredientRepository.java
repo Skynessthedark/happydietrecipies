@@ -2,6 +2,7 @@ package com.happydieting.dev.repository;
 
 import com.happydieting.dev.data.IngredientData;
 import com.happydieting.dev.model.IngredientModel;
+import com.happydieting.dev.model.RecipeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +23,7 @@ public interface IngredientRepository extends JpaRepository<IngredientModel, Lon
     @Query("SELECT new com.happydieting.dev.data.IngredientData(im.code, im.name) FROM IngredientModel im " +
             "WHERE LENGTH(:keyword) >= 3 AND LOWER(im.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<IngredientData> searchDataByName(@Param("keyword") String keyword);
+
+    @Query("SELECT im FROM RecipeModel rm JOIN rm.ingredients im WHERE rm = :recipe")
+    List<IngredientModel> findIngredientModelsByRecipe(@Param("recipe") RecipeModel recipe);
 }

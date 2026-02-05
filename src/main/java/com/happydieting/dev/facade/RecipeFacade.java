@@ -1,0 +1,109 @@
+package com.happydieting.dev.facade;
+
+import com.happydieting.dev.data.NutritionUnitData;
+import com.happydieting.dev.data.RecipeData;
+import com.happydieting.dev.exception.InvalidRecipeException;
+import com.happydieting.dev.model.MediaModel;
+import com.happydieting.dev.model.RecipeModel;
+import com.happydieting.dev.model.UserModel;
+import com.happydieting.dev.service.*;
+import com.happydieting.dev.validator.RecipeFormValidator;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+@Component
+public class RecipeFacade {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeFacade.class);
+
+    private final RecipeService recipeService;
+    private final RecipeFormValidator recipeFormValidator;
+    private final UserService userService;
+    private final MediaService mediaService;
+    private final NutritionalValueService nutritionalValueService;
+    private final ModelMapper modelMapper;
+    private final IngredientService ingredientService;
+    private final CategoryService categoryService;
+
+    public RecipeFacade(RecipeService recipeService, RecipeFormValidator recipeFormValidator, UserService userService, MediaService mediaService, NutritionService nutritionService, NutritionalValueService nutritionalValueService, ModelMapper modelMapper, IngredientService ingredientService, CategoryService categoryService) {
+        this.recipeService = recipeService;
+        this.recipeFormValidator = recipeFormValidator;
+        this.userService = userService;
+        this.mediaService = mediaService;
+        this.nutritionalValueService = nutritionalValueService;
+        this.modelMapper = modelMapper;
+        this.ingredientService = ingredientService;
+        this.categoryService = categoryService;
+    }
+
+
+    public boolean create(final RecipeData recipeForm) {
+        try{
+            if(recipeFormValidator.isInvalid(recipeForm, Boolean.TRUE)){
+                throw new InvalidRecipeException("Recipe Form is null or invalid.");
+            }
+
+            return recipeService.create(recipeForm);
+        } catch (InvalidRecipeException e) {
+            LOGGER.error("Recipe creation failed.", e);
+        } catch (Exception e) {
+            LOGGER.error("An exception occured.", e);
+        }
+        return false;
+    }
+
+    public List<RecipeData> getRecipesOfUser(UserModel user) {
+        if(user == null){
+            LOGGER.error("User is not found.");
+            return Collections.emptyList();
+        }
+
+        return getRecipeDataList(recipeService.getRecipeModels(user));
+    }
+
+    public MediaModel getRecipeImage(String recipeCode){
+        return StringUtils.hasText(recipeCode)?
+                recipeService.getRecipeImage(recipeCode):
+                null;
+    }
+
+    public List<RecipeData> getRecipeDataList(List<RecipeModel> recipes) {
+        if(recipes == null || recipes.isEmpty()) Collections.emptyList();
+
+        List<RecipeData> recipeList = new ArrayList<>();
+        for(RecipeModel recipe: recipes){
+            recipeList.add(getRecipeData(recipe));
+        }
+        return recipeList;
+    }
+
+    public RecipeData getRecipeData(RecipeModel recipe) {
+        if(Objects.isNull(recipe)) return null;
+
+        RecipeData recipeData = new RecipeData();
+        recipeData.setId(recipe.getId());
+        recipeData.setCode(recipe.getCode());
+        recipeData.setName(recipe.getName());
+        recipeData.setRecipe(recipe.getRecipe());
+        recipeData.setDescription(recipe.getDescription());
+        recipeData.setTips(recipe.getTips());
+        recipeData.setServingAmount(recipe.getServingAmount());
+
+        recipeData.setOwner(userService.convertModel2Data(recipe.getOwner()));
+        recipeData.setServingUnit(modelMapper.map(recipe.getServingUnit(), NutritionUnitData.class));
+        recipeData.setNutritionalValues(nutritionalValueService.getNutritionalValueDatas(recipe));
+        recipeData.setIngredients(ingredientService.getIngredientDatas(recipe));
+        recipeData.setCategories(categoryService.getCategoryDatas(recipe));
+        recipeData.setImageUrl(mediaService.getMediaUrlByOwner(recipe.getId(), RecipeModel.class));
+        return recipeData;
+    }
+
+}

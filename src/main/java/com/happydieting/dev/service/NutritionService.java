@@ -1,36 +1,33 @@
 package com.happydieting.dev.service;
 
-import com.happydieting.dev.data.NutritionalValueData;
+import com.happydieting.dev.data.GenericData;
 import com.happydieting.dev.model.NutritionTypeModel;
 import com.happydieting.dev.model.NutritionUnitModel;
-import com.happydieting.dev.model.NutritionalValueModel;
-import com.happydieting.dev.model.RecipeModel;
 import com.happydieting.dev.repository.NutritionTypeRepository;
 import com.happydieting.dev.repository.NutritionUnitRepository;
-import com.happydieting.dev.repository.NutritionalValueRepository;
-import com.happydieting.dev.repository.RecipeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class NutritionService {
 
-    private NutritionalValueRepository nutritionalValueRepository;
-    private NutritionUnitRepository nutritionUnitRepository;
-    private NutritionTypeRepository nutritionTypeRepository;
-    private RecipeRepository recipeRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(NutritionService.class);
 
-    public NutritionService(NutritionalValueRepository nutritionalValueRepository, NutritionUnitRepository nutritionUnitRepository, NutritionTypeRepository nutritionTypeRepository, RecipeRepository recipeRepository) {
-        this.nutritionalValueRepository = nutritionalValueRepository;
+    private final NutritionUnitRepository nutritionUnitRepository;
+    private final NutritionTypeRepository nutritionTypeRepository;
+
+    public NutritionService(NutritionUnitRepository nutritionUnitRepository, NutritionTypeRepository nutritionTypeRepository) {
         this.nutritionUnitRepository = nutritionUnitRepository;
         this.nutritionTypeRepository = nutritionTypeRepository;
-        this.recipeRepository = recipeRepository;
     }
 
     public boolean saveNutritionUnit(String id, String code, String name){
-        if(code == null || name == null){
-            //TODO: logging
+        if(checkCodeAndName(code, name)){
+            LOGGER.error("Nutrition Unit code or name is null");
             return false;
         }
 
@@ -41,7 +38,7 @@ public class NutritionService {
         }else {
             Optional<NutritionUnitModel> nutritionUnitModelOpt = nutritionUnitRepository.findNutritionUnitModelById(Long.valueOf(id));
             if(nutritionUnitModelOpt.isEmpty()){
-                //TODO: logging
+                LOGGER.error("Nutrition Unit cannot be found by id: {0}", id);
                 return false;
             }
             nutritionUnitModel = nutritionUnitModelOpt.get();
@@ -54,8 +51,8 @@ public class NutritionService {
     }
 
     public boolean saveNutritionType(String id, String code, String name){
-        if(code == null || name == null){
-            //TODO: logging
+        if(checkCodeAndName(code, name)){
+            LOGGER.error("Nutrition Type code or name is null");
             return false;
         }
 
@@ -66,7 +63,7 @@ public class NutritionService {
         }else {
             Optional<NutritionTypeModel> nutritionTypeModelOpt = nutritionTypeRepository.findNutritionTypeModelById(Long.valueOf(id));
             if(nutritionTypeModelOpt.isEmpty()){
-                //TODO: logging
+                LOGGER.error("Nutrition Type cannot be found by id: {0}", id);
                 return false;
             }
             nutritionTypeModel = nutritionTypeModelOpt.get();
@@ -78,49 +75,46 @@ public class NutritionService {
         return true;
     }
 
-    public boolean saveNutritionValue(NutritionalValueData nutritionalValueData){
-        if(nutritionalValueData == null)
-            //TODO: validation required
-            return false;
+    public NutritionUnitModel getNutritionUnitByCode(String code){
+        if(code == null) return null;
 
-        NutritionalValueModel nutritionalValueModel;
+        return nutritionUnitRepository
+                .findNutritionUnitModelByCode(code)
+                .orElse(null);
+    }
 
-        if(nutritionalValueData.getId() == null){
-            nutritionalValueModel = new NutritionalValueModel();
-        }else {
-            Optional<NutritionalValueModel> nutritionalValueModelOpt =
-                    nutritionalValueRepository.findNutritionalValueModelById(Long.valueOf(nutritionalValueData.getId()));
-            if(nutritionalValueModelOpt.isEmpty()){
-                //TODO: logging
-                return false;
-            }
-            nutritionalValueModel = nutritionalValueModelOpt.get();
-        }
+    private boolean checkCodeAndName(String code, String name){
+        return code == null || code.isEmpty()
+                || name == null || name.isEmpty();
+    }
 
-        nutritionalValueModel.setValue(nutritionalValueData.getValue());
+    public GenericData getNutritionUnitData(NutritionUnitModel unit) {
+        if(unit == null) return null;
+        GenericData genericData = new GenericData();
+        genericData.setId(unit.getId());
+        genericData.setCode(unit.getCode());
+        genericData.setName(unit.getName());
+        return genericData;
+    }
 
-        Optional<RecipeModel> recipeModelOpt =
-                recipeRepository.findRecipeModelById(Long.valueOf(nutritionalValueData.getRecipeId()));
-        if(recipeModelOpt.isEmpty()){
-            return false;
-        }
-        nutritionalValueModel.setRecipe(recipeModelOpt.get());
+    public GenericData getNutritionTypeData(NutritionTypeModel type) {
+        if(type == null) return null;
+        GenericData genericData = new GenericData();
+        genericData.setId(type.getId());
+        genericData.setCode(type.getCode());
+        genericData.setName(type.getName());
+        return genericData;
+    }
 
-        Optional<NutritionTypeModel> nutritionTypeModelOpt =
-                nutritionTypeRepository.findNutritionTypeModelById(Long.valueOf(nutritionalValueData.getNutritionType().getId()));
-        if(nutritionTypeModelOpt.isEmpty()){
-            return false;
-        }
-        nutritionalValueModel.setType(nutritionTypeModelOpt.get());
+    public List<GenericData> getAllNutritionUnits() {
+        return nutritionUnitRepository.findAll().stream()
+                .map(this::getNutritionUnitData)
+                .toList();
+    }
 
-        Optional<NutritionUnitModel> nutritionUnitModelOpt =
-                nutritionUnitRepository.findNutritionUnitModelById(Long.valueOf(nutritionalValueData.getNutritionUnit().getId()));
-        if(nutritionUnitModelOpt.isEmpty()){
-            return false;
-        }
-        nutritionalValueModel.setUnit(nutritionUnitModelOpt.get());
-
-        nutritionalValueRepository.save(nutritionalValueModel);
-        return true;
+    public List<GenericData> getAllNutritionTypes() {
+        return nutritionTypeRepository.findAll().stream()
+                .map(this::getNutritionTypeData)
+                .toList();
     }
 }

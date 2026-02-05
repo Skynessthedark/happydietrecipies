@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface RecipeRepository extends JpaRepository<RecipeModel, Long> {
     Optional<RecipeModel> findRecipeModelById(Long id);
     Optional<RecipeModel> findRecipeModelByCode(String code);
-    Optional<RecipeModel> findRecipeModelByOwner(UserModel owner);
+
+    //TODO: sonradan pageable yapılmalı
+    List<RecipeModel> findRecipesByOwner(UserModel owner);
 
     @Query("SELECT rm FROM RecipeModel rm JOIN FETCH rm.categories cat WHERE cat.code = :categoryCode")
     List<RecipeModel> findRecipesByCategoryCodeFetch(@Param("categoryCode") String categoryCode);

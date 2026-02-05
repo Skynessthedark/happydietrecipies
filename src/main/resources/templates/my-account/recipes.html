@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <th:block th:replace="~{layout/main :: layout-head}"></th:block>
+    <title>Giriş Yap</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<main class="flex-grow-1">
+    <div th:replace="~{layout/main :: navbar}"></div>
+
+    <header class="py-5">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center">
+                <div>
+                    <div class="text-center text-xxl-center">
+                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Welcome to Happy Diet Recipes</span></h1>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+        <div class="text-center mb-5">
+            <p class="lead fw-normal text-muted mb-0">Login to explore more recipes within your taste!</p>
+        </div>
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-8 col-xl-4">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <form id="loginForm" name="loginForm" th:action="@{/login}" method="post">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="email" type="email" name="username" required />
+                        <label for="email">Email</label>
+                        <div class="invalid-feedback" data-sb-feedback="email:required">Email is required.</div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="password" type="password" name="password" required />
+                        <label for="password">Password</label>
+                        <div class="invalid-feedback" data-sb-feedback="phone:required">Please enter a valid password.</div>
+                    </div>
+                    <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Login</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+
+<script th:replace="~{layout/main :: scripts}"></script>
+</body>
+</html>
