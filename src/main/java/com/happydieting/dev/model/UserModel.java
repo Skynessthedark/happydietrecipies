@@ -25,7 +25,7 @@
         @NotBlank(message = "The full name field cannot be left blank.")
         private String fullName;
 
-        @Email(message = "Please enter a valid e-mail address.")
+        @Email
         @NotBlank(message = "The e-mail field cannot be left blank.")
         private String email;
 
