@@ -1,54 +1,63 @@
-package com.happydieting.dev.model;
+    package com.happydieting.dev.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+    import jakarta.persistence.*;
+    import jakarta.validation.constraints.Email;
+    import jakarta.validation.constraints.NotBlank;
+    import lombok.Data;
+    import lombok.EqualsAndHashCode;
+    import lombok.Getter;
+    import lombok.Setter;
+    import org.springframework.security.core.GrantedAuthority;
+    import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+    import java.util.Collection;
+    import java.util.List;
 
-@Entity
-@Table(name = "USER")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@Getter
-@Setter
-public class UserModel extends ItemModel implements UserDetails {
+    @Entity
+    @Table(name = "USER")
+    @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+    @Getter
+    @Setter
+    public class UserModel extends ItemModel implements UserDetails {
 
-    private String username;
-    private String fullName;
-    private String email;
-    private String password;
+        private String username;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private MediaModel image;
+        @NotBlank(message = "The full name field cannot be left blank.")
+        private String fullName;
 
-    private String bio;
+        @Email(message = "Please enter a valid e-mail address.")
+        @NotBlank(message = "The e-mail field cannot be left blank.")
+        private String email;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        @NotBlank
+        private String password;
+
+        @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        private MediaModel image;
+
+        private String bio;
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return List.of();
+        }
+
+        @Override
+        public String getPassword() {
+            return password;
+        }
+
+        @Override
+        public String getUsername() {
+            return username;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return UserDetails.super.isEnabled();
+        }
+
+        @Override public boolean isAccountNonExpired() { return true; }
+        @Override public boolean isAccountNonLocked() { return true; }
+        @Override public boolean isCredentialsNonExpired() { return true; }
     }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
-    }
-
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-}
