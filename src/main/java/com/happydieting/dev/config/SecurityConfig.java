@@ -31,7 +31,7 @@ public class SecurityConfig {
     private static final String API_PROCESSING_URL = API_PREFIX + "**";
     private static final String[] WEB_WHITELIST = {"/css/**", "/images/**", "/js/**"};
     private static final String[] API_WHITELIST = {"/api/auth/**", "/api/account/register"};
-    public static final String REGISTER = "/register";
+    public static final String REGISTER = "/signup";
 
 
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter,
