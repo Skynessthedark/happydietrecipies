@@ -7,9 +7,9 @@ import java.io.Serializable;
 @Data
 public class NutritionalValueData implements Serializable {
 
-    private String id;
+    private long id;
     private Double value;
     private GenericData nutritionType;
     private GenericData nutritionUnit;
-    private String recipeId;
+    private String recipeCode;
 }
