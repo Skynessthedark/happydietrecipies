@@ -1,6 +1,7 @@
 package com.happydieting.dev.data;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UserData extends ItemData {
@@ -8,6 +9,7 @@ public class UserData extends ItemData {
     private String fullName;
     private String email;
     private String password;
-    //private byte[] avatar;
+    private String imageUrl;
+    private transient MultipartFile image;
     private String bio;
 }
