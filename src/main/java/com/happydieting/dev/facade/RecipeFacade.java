@@ -7,6 +7,7 @@ import com.happydieting.dev.model.MediaModel;
 import com.happydieting.dev.model.RecipeModel;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.service.*;
+import com.happydieting.dev.util.HappyDietingUtil;
 import com.happydieting.dev.validator.RecipeFormValidator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -89,7 +90,7 @@ public class RecipeFacade {
         if(Objects.isNull(recipe)) return null;
 
         RecipeData recipeData = new RecipeData();
-        recipeData.setId(recipe.getId());
+        HappyDietingUtil.convertItemToData(recipe, recipeData);
         recipeData.setCode(recipe.getCode());
         recipeData.setName(recipe.getName());
         recipeData.setRecipe(recipe.getRecipe());
