@@ -5,8 +5,6 @@ import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.enums.UserMediaPath;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
-import com.happydieting.dev.enums.RecipeMediaPath;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +31,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
     public boolean createUser(RegisterData registerForm, MultipartFile image) {
         if (registerForm == null || registerForm.getEmail() == null) {
             return false;
@@ -53,7 +50,7 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(registerForm.getPassword());
             newUser.setPassword(encodedPassword);
         } else {
-            return false; // Şifresiz kullanıcı kaydedilemez
+            return false;
         }
 
         userRepository.save(newUser);
