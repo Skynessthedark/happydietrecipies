@@ -110,4 +110,7 @@ public class RecipeService {
         return recipeRepository.findRecipesByOwner(owner);
     }
 
+    public RecipeModel getRecipeByCode(String recipeCode) {
+        return recipeRepository.findRecipeModelByCode(recipeCode).orElse(null);
+    }
 }

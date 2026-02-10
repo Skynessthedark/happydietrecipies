@@ -65,4 +65,14 @@ public class RecipeController {
     public void getRecipeImage(@PathVariable("recipeCode") String recipeCode, HttpServletResponse response) throws IOException {
         MediaUtil.printMedia(recipeFacade.getRecipeImage(recipeCode), response);
     }
+
+    @GetMapping(value = "/{recipeCode}")
+    public String getRecipe(@PathVariable("recipeCode") String recipeCode, Model model) {
+        //TODO: redirection ve global exception handler tanımlanacak.
+        if(recipeCode == null) return "redirect:/recipes";
+
+        model.addAttribute("recipe", recipeFacade.getRecipeByCode(recipeCode));
+
+        return "recipe/recipe-detail";
+    }
 }
