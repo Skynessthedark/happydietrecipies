@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <th:block th:replace="~{layout/main :: layout-head}"></th:block>
+    <title th:text="${recipe != null ? recipe.name + ' - Happy Diet Recipes' : 'Recipe Detail'}">Recipe Detail</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<main class="flex-grow-1">
+    <div th:replace="~{layout/main :: navbar}"></div>
+
+    <section class="py-4 border-bottom bg-light">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-8">
+                    <div class="text-start">
+                        <h1 class="display-5 fw-bolder mb-2">
+                            <span class="text-gradient d-inline" th:text="${recipe.name}">Recipe Name</span>
+                        </h1>
+                        <p class="lead text-muted mb-2" th:text="${recipe.description}">
+                            Short description of the recipe goes here.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 small text-muted mt-2">
+                            <div th:if="${recipe.servingAmount != null}">
+                                <i class="bi bi-people-fill me-1"></i>
+                                <span th:text="${recipe.servingAmount}">2</span>
+                                <span th:text="${recipe.servingUnit != null ? recipe.servingUnit.code : ''}">portion</span>
+                            </div>
+                            <div th:if="${recipe.createdDate != null}">
+                                <i class="bi bi-clock-history me-1"></i>
+                                <span th:text="${recipe.createdDate}">2025-01-01</span>
+                            </div>
+                            <div th:if="${recipe.owner != null}">
+                                <i class="bi bi-person-circle me-1"></i>
+                                <span th:text="${recipe.owner.fullName != null ? recipe.owner.fullName : recipe.owner.username}">Owner</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-lg-end text-start mt-3 mt-lg-0">
+                    <a class="btn btn-outline-secondary me-2 mb-2" th:href="@{/recipes}">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Back to Recipes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="py-5">
+        <div class="container px-5">
+            <div th:replace="~{layout/main :: alerts}"></div>
+
+            <div th:if="${recipe == null}" class="text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-exclamation-triangle text-warning display-4"></i>
+                </div>
+                <h2 class="h3 fw-bold mb-2">Recipe not found</h2>
+                <p class="text-muted mb-4">
+                    The recipe you are looking for may have been removed or is not accessible.
+                </p>
+                <a class="btn btn-primary" th:href="@{/recipes}">
+                    Go to Recipes
+                </a>
+            </div>
+
+            <div th:if="${recipe != null}" class="row gx-5">
+                <!-- Left: Image + meta -->
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+                        <div class="card-body">
+                            <div class="position-relative">
+                            <div th:switch="${recipe.imageUrl != null && recipe.imageUrl.length() > 0}">
+                                <div th:case="${true}">
+                                    <!--RECIPE IMAGE -->
+                                    <img class="card-img-top"
+                                         th:src="${recipe.imageUrl}"
+                                         alt="Recipe image"
+                                         style="object-fit: cover; height: 520px;">
+                                </div>
+                                <div th:case="${false}">
+                                    <!--DUMMY -->
+                                    <img class="card-img-top"
+                                         th:src="@{/images/dummy-recipe.png}"
+                                         alt="Recipe image"
+                                         style="object-fit: cover; height: 520px;">
+                                </div>
+                            </div>
+                            <span class="badge bg-success position-absolute top-0 start-0 m-3 rounded-pill"
+                                  th:if="${recipe.enabled}">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Active
+                            </span>
+                            <span class="badge bg-secondary position-absolute top-0 start-0 m-3 rounded-pill"
+                                  th:if="${!recipe.enabled}">
+                                <i class="bi bi-pause-circle me-1"></i>
+                                Inactive
+                            </span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                        <div class="card-body">
+                            <div class="mb-3" th:if="${recipe.categories != null and !recipe.categories.isEmpty()}">
+                                <h3 class="h6 text-uppercase text-muted mb-2">Categories</h3>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge rounded-pill bg-light text-primary border"
+                                          th:each="cat : ${recipe.categories}"
+                                          th:text="${cat.name}">
+                                        Category
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3" th:if="${recipe.ingredients != null and !recipe.ingredients.isEmpty()}">
+                                <h3 class="h6 text-uppercase text-muted mb-2">Ingredients</h3>
+                                <ul class="list-unstyled small mb-0">
+                                    <li th:each="ing : ${recipe.ingredients}" class="d-flex align-items-start mb-1">
+                                        <span class="text-primary me-2">•</span>
+                                        <span th:text="${ing.name}">Ingredient name</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div th:if="${recipe.nutritionalValues != null and !recipe.nutritionalValues.isEmpty()}">
+                                <h3 class="h6 text-uppercase text-muted mb-2">Nutritional Values</h3>
+                                <div class="row g-2 small">
+                                    <div class="col-6" th:each="nv : ${recipe.nutritionalValues}">
+                                        <div class="border rounded-3 p-2 h-100">
+                                            <div class="text-muted" th:text="${nv.nutritionType.name}">Calories</div>
+                                            <div class="fw-semibold" th:text="${nv.value}">120</div>
+                                            <div class="text-muted" th:if="${nv.nutritionUnit != null and nv.nutritionUnit.code != null}" th:text="${nv.nutritionUnit.code}">kcal</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Instructions + tips -->
+                <div class="col-lg-7">
+                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                        <div class="card-body p-4">
+                            <h2 class="h4 fw-bold mb-3">
+                                <i class="bi bi-list-ul me-2"></i>
+                                Preparation
+                            </h2>
+                            <p class="text-muted mb-0" th:utext="${#strings.replace(recipe.recipe, '\n', '<br/>')}">
+                                Step-by-step preparation of the recipe goes here.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0 rounded-4" th:if="${recipe.tips != null and !#strings.isEmpty(recipe.tips)}">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">
+                                <i class="bi bi-lightbulb me-2 text-warning"></i>
+                                Tips
+                            </h2>
+                            <p class="text-muted mb-0" th:utext="${#strings.replace(recipe.tips, '\n', '<br/>')}">
+                                Helpful tips for this recipe.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+
+<script th:replace="~{layout/main :: scripts}"></script>
+</body>
+</html>

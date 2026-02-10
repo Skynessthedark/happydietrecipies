@@ -107,4 +107,9 @@ public class RecipeFacade {
         return recipeData;
     }
 
+    public RecipeData getRecipeByCode(String recipeCode) {
+        if(recipeCode == null) return null;
+        RecipeModel recipe = recipeService.getRecipeByCode(recipeCode);
+        return recipe.getEnabled().equals(Boolean.TRUE)? getRecipeData(recipe): null;
+    }
 }
