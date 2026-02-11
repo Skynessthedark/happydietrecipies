@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ public class CustomErrorController implements ErrorController {
 
     private static final String ERROR_PAGE = "error/error";
 
-    @RequestMapping("/error")
+    @RequestMapping(ControllerConstant.ERROR)
     public String error(HttpServletRequest request, Model model) {
         if (request.getDispatcherType() != DispatcherType.ERROR) {
             return ERROR_PAGE;

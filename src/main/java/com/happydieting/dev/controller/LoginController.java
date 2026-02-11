@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.AuthData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping(ControllerConstant.LOGIN)
 public class LoginController {
 
     @GetMapping

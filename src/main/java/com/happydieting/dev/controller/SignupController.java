@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.RegisterData;
 import com.happydieting.dev.repository.UserRepository;
 import com.happydieting.dev.security.service.AutoLoginService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/signup")
+@RequestMapping(ControllerConstant.SIGNUP)
 public class SignupController {
 
     private final UserService userService;

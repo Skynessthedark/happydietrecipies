@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.RecipeData;
 import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.data.response.ResponseData;
@@ -18,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
-@RequestMapping("/recipes")
+@RequestMapping(ControllerConstant.RECIPES)
 public class RecipeController {
 
     private final NutritionService nutritionService;
@@ -37,6 +39,19 @@ public class RecipeController {
 
     @GetMapping
     public String getRecipeListPage(Model model) {
+        return "recipe/list";
+    }
+
+    @GetMapping
+    public String getRecipeListPage(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(required = false) String sort,
+                                   Model model) {
+        List<RecipeData> recipes = null;
+        if(sort != null) recipes = recipeFacade.getRecipes(page, size, sort);
+        else recipes = recipeFacade.getRecipes(page, size);
+
+        model.addAttribute("recipes", recipes);
         return "recipe/list";
     }
 
@@ -68,8 +83,7 @@ public class RecipeController {
 
     @GetMapping(value = "/{recipeCode}")
     public String getRecipe(@PathVariable("recipeCode") String recipeCode, Model model) {
-        //TODO: redirection ve global exception handler tanımlanacak.
-        if(recipeCode == null) return "redirect:/recipes";
+        if(recipeCode == null) return ControllerConstant.REDIRECT_RECIPES;
 
         model.addAttribute("recipe", recipeFacade.getRecipeByCode(recipeCode));
 

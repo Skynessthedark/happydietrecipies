@@ -62,12 +62,23 @@ public class RecipeFacade {
     }
 
     public List<RecipeData> getRecipesOfUser(UserModel user) {
-        if(user == null){
-            LOGGER.error("User is not found.");
-            return Collections.emptyList();
-        }
+        if(checkUserAndLog(user)) return getRecipeDataList(recipeService.getRecipeModels(user));
 
-        return getRecipeDataList(recipeService.getRecipeModels(user));
+        return Collections.emptyList();
+    }
+
+    public List<RecipeData> getRecipesOfUser(UserModel owner, Integer page, Integer size) {
+        if(checkPageAndSize(page, size) && checkUserAndLog(owner)) return getRecipeDataList(recipeService.getRecipeModels(owner, page, size));
+
+        return Collections.emptyList();
+    }
+
+    public List<RecipeData> getRecipesOfUser(UserModel owner, Integer page, Integer size, String keyword) {
+        if(checkPageAndSize(page, size)
+                && checkUserAndLog(owner)
+                && keyword != null && !keyword.isBlank()) return getRecipeDataList(recipeService.getRecipeModels(owner, page, size, keyword));
+
+        return Collections.emptyList();
     }
 
     public MediaModel getRecipeImage(String recipeCode){
@@ -77,7 +88,7 @@ public class RecipeFacade {
     }
 
     public List<RecipeData> getRecipeDataList(List<RecipeModel> recipes) {
-        if(recipes == null || recipes.isEmpty()) Collections.emptyList();
+        if(recipes == null || recipes.isEmpty()) return Collections.emptyList();
 
         List<RecipeData> recipeList = new ArrayList<>();
         for(RecipeModel recipe: recipes){
@@ -111,5 +122,39 @@ public class RecipeFacade {
         if(recipeCode == null) return null;
         RecipeModel recipe = recipeService.getRecipeByCode(recipeCode);
         return recipe.getEnabled().equals(Boolean.TRUE)? getRecipeData(recipe): null;
+    }
+
+    public List<RecipeData> getRecipes(Integer page, Integer size) {
+        if(checkPageAndSize(page, size))
+            return getRecipesAsDataList(recipeService.getRecipes(page, size));
+
+        return Collections.emptyList();
+    }
+
+    public List<RecipeData> getRecipes(Integer page, Integer size, String keyword) {
+        if(checkPageAndSize(page, size)
+                || keyword == null || keyword.isBlank())
+            return getRecipesAsDataList(recipeService.getRecipes(page, size, keyword));
+
+        return Collections.emptyList();
+    }
+
+    private List<RecipeData> getRecipesAsDataList(List<RecipeModel> recipes) {
+        if(recipes == null || recipes.isEmpty()) return Collections.emptyList();
+
+        return getRecipeDataList(recipes);
+    }
+
+    private boolean checkPageAndSize(Integer page, Integer size) {
+        return page != null && page > 0
+                && size != null && size > 0;
+    }
+
+    private boolean checkUserAndLog(UserModel user) {
+        if(user == null){
+            LOGGER.error("User is not found.");
+            return false;
+        }
+        return true;
     }
 }

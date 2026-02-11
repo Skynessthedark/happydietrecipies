@@ -13,6 +13,10 @@ import com.happydieting.dev.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -110,7 +114,35 @@ public class RecipeService {
         return recipeRepository.findRecipesByOwner(owner);
     }
 
+    public List<RecipeModel> getRecipeModels(UserModel owner, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<RecipeModel> recipes = recipeRepository.findRecipesByOwner(owner, pageable);
+        return recipes.getContent();
+    }
+
+    public List<RecipeModel> getRecipeModels(UserModel owner, int page, int size, String keyword) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(keyword).ascending());
+
+        Page<RecipeModel> recipes = recipeRepository.findRecipesByOwner(owner, pageable);
+        return recipes.getContent();
+    }
+
     public RecipeModel getRecipeByCode(String recipeCode) {
         return recipeRepository.findRecipeModelByCode(recipeCode).orElse(null);
+    }
+
+    public List<RecipeModel> getRecipes(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<RecipeModel> recipes = recipeRepository.findRecipes(pageable);
+        return recipes.getContent();
+    }
+
+    public List<RecipeModel> getRecipes(int page, int size, String keyword) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(keyword).ascending());
+
+        Page<RecipeModel> recipes = recipeRepository.findRecipes(pageable);
+        return recipes.getContent();
     }
 }
