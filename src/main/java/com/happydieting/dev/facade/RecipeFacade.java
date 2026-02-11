@@ -146,8 +146,8 @@ public class RecipeFacade {
     }
 
     private boolean checkPageAndSize(Integer page, Integer size) {
-        return page != null && page > 0
-                && size != null && size > 0;
+        return page != null && page >= 0
+                && size != null && size >= 0;
     }
 
     private boolean checkUserAndLog(UserModel user) {

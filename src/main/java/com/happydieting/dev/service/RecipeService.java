@@ -35,9 +35,8 @@ public class RecipeService {
     private final NutritionalValueService nutritionalValueService;
     private final MediaService mediaService;
     private final NutritionService nutritionService;
-    private final ModelMapper modelMapper;
 
-    public RecipeService(RecipeRepository recipeRepository, CategoryRepository categoryRepository, IngredientRepository ingredientRepository, UserRepository userRepository, NutritionalValueService nutritionalValueService, MediaService mediaService, NutritionService nutritionService, ModelMapper modelMapper) {
+    public RecipeService(RecipeRepository recipeRepository, CategoryRepository categoryRepository, IngredientRepository ingredientRepository, UserRepository userRepository, NutritionalValueService nutritionalValueService, MediaService mediaService, NutritionService nutritionService) {
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.ingredientRepository = ingredientRepository;
@@ -45,7 +44,6 @@ public class RecipeService {
         this.nutritionalValueService = nutritionalValueService;
         this.mediaService = mediaService;
         this.nutritionService = nutritionService;
-        this.modelMapper = modelMapper;
     }
 
     public boolean create(final RecipeData recipeForm) throws InvalidRecipeException {
@@ -135,14 +133,14 @@ public class RecipeService {
     public List<RecipeModel> getRecipes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<RecipeModel> recipes = recipeRepository.findRecipes(pageable);
+        Page<RecipeModel> recipes = recipeRepository.findAll(pageable);
         return recipes.getContent();
     }
 
     public List<RecipeModel> getRecipes(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(keyword).ascending());
 
-        Page<RecipeModel> recipes = recipeRepository.findRecipes(pageable);
+        Page<RecipeModel> recipes = recipeRepository.findAll(pageable);
         return recipes.getContent();
     }
 }

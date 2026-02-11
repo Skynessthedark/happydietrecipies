@@ -25,15 +25,27 @@ public class MyAccountController {
     }
 
     @GetMapping(ControllerConstant.RECIPES)
-    public String getMyRecipesPage(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size,
+    public String getMyRecipesPage(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "9") int size,
                                    @RequestParam(required = false) String sort,
                                    Model model) {
-        List<RecipeData> recipes = null;
-        if(sort != null) recipes = recipeFacade.getRecipesOfUser(sessionService.getSessionUser(), page, size, sort);
-        else recipes = recipeFacade.getRecipesOfUser(sessionService.getSessionUser(), page, size);
+        List<RecipeData> recipes;
+        if (sort != null && !sort.isBlank()) {
+            recipes = recipeFacade.getRecipesOfUser(sessionService.getSessionUser(), page, size, sort);
+        } else {
+            recipes = recipeFacade.getRecipesOfUser(sessionService.getSessionUser(), page, size);
+        }
+
+        boolean hasPrev = page > 0;
+        boolean hasNext = recipes != null && recipes.size() == size;
 
         model.addAttribute("recipes", recipes);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        model.addAttribute("sort", sort);
+        model.addAttribute("hasPrev", hasPrev);
+        model.addAttribute("hasNext", hasNext);
+
         return "my-account/recipes";
     }
 }

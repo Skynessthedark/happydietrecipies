@@ -38,12 +38,7 @@ public class RecipeController {
     }
 
     @GetMapping
-    public String getRecipeListPage(Model model) {
-        return "recipe/list";
-    }
-
-    @GetMapping
-    public String getRecipeListPage(@RequestParam(defaultValue = "1") int page,
+    public String getRecipeListPage(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
                                    @RequestParam(required = false) String sort,
                                    Model model) {

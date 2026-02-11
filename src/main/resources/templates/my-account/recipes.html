@@ -56,7 +56,7 @@
                         My Recipes
                     </h2>
                     <p class="text-muted mb-0 small">
-                        <span th:text="${#lists.size(recipes)}"></span> recipe(s) found.
+                        <span th:text="${#lists.size(recipes)}"></span> recipe(s) on this page.
                     </p>
                 </div>
 
@@ -136,6 +136,34 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="text-muted small">
+                        Page <span th:text="${page + 1}">1</span>
+                    </div>
+                    <nav aria-label="My recipes pagination">
+                        <ul class="pagination mb-0">
+                            <li class="page-item" th:classappend="${!hasPrev} ? ' disabled'">
+                                <a class="page-link"
+                                   th:href="@{/me/recipes(page=${page - 1}, size=${size}, sort=${sort})}"
+                                   tabindex="-1" aria-disabled="true">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="d-none d-md-inline ms-1">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <span class="page-link" th:text="${page + 1}">1</span>
+                            </li>
+                            <li class="page-item" th:classappend="${!hasNext} ? ' disabled'">
+                                <a class="page-link"
+                                   th:href="@{/me/recipes(page=${page + 1}, size=${size}, sort=${sort})}">
+                                    <span class="d-none d-md-inline me-1">Next</span>
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

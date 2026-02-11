@@ -15,8 +15,6 @@ public interface RecipeRepository extends JpaRepository<RecipeModel, Long> {
     Optional<RecipeModel> findRecipeModelById(Long id);
     Optional<RecipeModel> findRecipeModelByCode(String code);
 
-    Page<RecipeModel> findRecipes(Pageable pageable);
-
     Page<RecipeModel> findRecipesByOwner(UserModel owner, Pageable pageable);
 
     List<RecipeModel> findRecipesByOwner(UserModel owner);
