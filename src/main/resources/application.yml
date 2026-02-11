@@ -1,6 +1,9 @@
 spring:
   application:
     name: happydietrecipes
+  web:
+    resources:
+      add-mappings: true
 
 redirect:
   forwardUrl: /
