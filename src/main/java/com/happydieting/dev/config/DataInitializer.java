@@ -79,7 +79,6 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         user1.setUsername("test1@example.com");
         user1.setPassword(passwordEncoder.encode("password123"));
         user1.setBio("İlk test kullanıcısı");
-        //TODO: user1.setAvatar(); mediamodel den sonra setlenecek
         entityManager.persist(user1);
 
         UserModel user2 = new UserModel();
@@ -88,7 +87,6 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         user2.setUsername("test2@example.com");
         user2.setPassword(passwordEncoder.encode("password123"));
         user2.setBio("İkinci test kullanıcısı");
-        //TODO: user2.setAvatar(); mediamodel den sonra setlenecek
         entityManager.persist(user2);
     }
 
