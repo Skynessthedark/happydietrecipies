@@ -34,5 +34,6 @@ public class AutoLoginService {
         securityContext.setAuthentication(authentication);
 
         sessionService.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+        sessionService.setSessionUser(username, authentication.getAuthorities());
     }
 }
