@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.CategoryData;
 import com.happydieting.dev.repository.CategoryRepository;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping(ControllerConstant.CATEGORY)
 public class CategoryController {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public CategoryController(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-    @GetMapping("/search")
+    @GetMapping(ControllerConstant.SEARCH)
     @ResponseBody
     public List<CategoryData> searchCategories(@RequestParam String categoryName) {
         return categoryRepository.searchDataByName(categoryName);

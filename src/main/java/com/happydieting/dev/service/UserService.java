@@ -5,7 +5,6 @@ import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.enums.UserMediaPath;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
-import com.happydieting.dev.enums.RecipeMediaPath;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
