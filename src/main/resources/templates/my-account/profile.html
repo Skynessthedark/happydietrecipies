@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="~{layout/main :: layout-head}">
+    <title>Profil Detayları</title>
+    <link rel="stylesheet" th:href="@{/css/custom/list_profile.css}">
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+<main class="flex-grow-1">
+    <div th:replace="~{layout/main :: navbar}"></div>
+
+    <section class="py-5">
+        <div class="container px-4">
+            <div th:replace="~{layout/main :: alerts}"></div>
+
+            <div th:if="${profileForm == null}" class="text-center py-5 bg-white rounded-4 shadow-sm border">
+                <div class="mb-3">
+                    <i class="bi bi-person-x text-muted display-1"></i>
+                </div>
+                <h2 class="h3 fw-bold text-dark">Profil Bulunamadı</h2>
+                <p class="text-muted mb-4">Ulaşmaya çalıştığınız profil artık mevcut olmayabilir.</p>
+                <a class="btn btn-primary px-4 rounded-pill shadow-sm" th:href="@{/templates/profile}">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+
+            <div th:if="${profileForm != null}" class="row g-4 align-items-stretch justify-content-center">
+
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <div class="position-relative mb-4">
+                                <div class="profile-avatar-glow">
+                                    <img th:src="${(profileForm.imageUrl != null && !profileForm.imageUrl.isEmpty()) ? profileForm.imageUrl : '/images/profile_image.png'}"
+                                         class="rounded-circle shadow border border-4 border-white"
+                                         alt="Profile image"
+                                         style="width: 180px; height: 180px; object-fit: cover;">
+                                </div>
+                                <span class="position-absolute bottom-0 end-0 translate-middle p-2 border border-light rounded-circle shadow-sm"
+                                      th:classappend="${profileForm.enabled} ? 'bg-success' : 'bg-secondary'"
+                                      style="width: 20px; height: 20px;"
+                                      th:title="${profileForm.enabled ? 'Aktif' : 'Pasif'}">
+                                </span>
+                            </div>
+
+                            <h3 class="fw-bold text-dark mb-1" th:text="${profileForm.fullName}">Name</h3>
+                            <p class="text-muted small mb-4" th:text="${profileForm.email}">email@example.com</p>
+
+                            <div class="d-flex gap-2">
+                                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                                    <i class="bi bi-shield-check text-primary me-1"></i> Onaylı Profil
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold text-dark mb-0">Hesap Detayları</h5>
+                                <div class="badge rounded-pill" th:classappend="${profileForm.enabled} ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'">
+                                    <i class="bi" th:classappend="${profileForm.enabled} ? 'bi-check-circle' : 'bi-pause-circle'"></i>
+                                    <span th:text="${profileForm.enabled ? 'Aktif' : 'Pasif'}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-light rounded-3 border-start border-primary border-4 shadow-sm">
+                                        <label class="text-muted small text-uppercase fw-bold d-block mb-1">Name</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person text-primary me-2"></i>
+                                            <span class="text-dark fw-semibold" th:text="${profileForm.fullName}">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-light rounded-3 border-start border-info border-4 shadow-sm">
+                                        <label class="text-muted small text-uppercase fw-bold d-block mb-1">E-Mail</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-envelope-at text-info me-2"></i>
+                                            <span class="text-dark fw-semibold text-truncate" th:text="${profileForm.email}">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <label class="text-muted small text-uppercase fw-bold mb-2">Biography</label>
+                                    <div class="p-4 rounded-4 bg-white border border-dashed border-2 position-relative">
+                                        <i class="bi bi-quote text-primary opacity-25 position-absolute top-0 start-0 m-2 fs-1"></i>
+                                        <p class="text-secondary mb-0 lh-lg" style="font-style: italic;"
+                                           th:utext="${#strings.replace(profileForm.bio, '\n', '<br/>')}">
+                                            Kullanıcı henüz bir biyografi eklememiş.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <div class="card-footer bg-transparent border-0 pb-4 px-4 text-end">
+                        <button class="btn btn-outline-primary rounded-pill px-4">
+                            <i class="bi bi-pencil-square me-2"></i>Düzenle
+                        </button>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+<script th:replace="~{layout/main :: scripts}"></script>
+</body>
+</html>

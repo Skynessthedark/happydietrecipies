@@ -1,0 +1,33 @@
+.profile_card {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.profile_left {
+    flex: 0 0 250px;
+    text-align: center;
+}
+
+.profile_right {
+    flex: 1;
+}
+
+.avatar_wrapper {
+    padding: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    display: inline-block;
+}
+
+.profile_image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+}
+
+.info_block {
+    margin-bottom: 20px;
+}

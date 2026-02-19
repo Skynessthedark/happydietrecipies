@@ -9,6 +9,8 @@ public class ControllerConstant {
     public static final String RECIPES = "/recipes";
     public static final String REDIRECT_HOME = REDIRECT + HOME;
     public static final String REDIRECT_RECIPES = REDIRECT + RECIPES;
+    public static final String PROFILE = "/profile";
+    public static final String USER = "/user";
 
     public class MyAccount{
         public static final String MY_ACCOUNT = "/me";

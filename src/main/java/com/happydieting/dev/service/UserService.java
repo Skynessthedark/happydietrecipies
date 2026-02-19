@@ -3,6 +3,7 @@ package com.happydieting.dev.service;
 import com.happydieting.dev.data.RegisterData;
 import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.enums.UserMediaPath;
+import com.happydieting.dev.model.MediaModel;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
 import com.happydieting.dev.enums.RecipeMediaPath;
@@ -17,16 +18,12 @@ import java.util.Objects;
 
 @Service
 public class UserService {
-
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final MediaService mediaService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(ModelMapper modelMapper,
-                       UserRepository userRepository,
-                       MediaService mediaService,
-                       @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(ModelMapper modelMapper, UserRepository userRepository, MediaService mediaService, @Lazy PasswordEncoder passwordEncoder) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.mediaService = mediaService;
@@ -38,32 +35,31 @@ public class UserService {
         if (registerForm == null || registerForm.getEmail() == null) {
             return false;
         }
-
         if (userRepository.findByUsername(registerForm.getEmail()).isPresent()) {
             return false;
         }
-
         UserModel newUser = new UserModel();
         newUser.setUsername(registerForm.getEmail());
         newUser.setFullName(registerForm.getFullName());
         newUser.setEmail(registerForm.getEmail());
         newUser.setBio(registerForm.getBio());
-
         if (registerForm.getPassword() != null && !registerForm.getPassword().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(registerForm.getPassword());
             newUser.setPassword(encodedPassword);
         } else {
             return false; // Şifresiz kullanıcı kaydedilemez
         }
-
         userRepository.save(newUser);
-
-        mediaService.saveMedia(newUser.getId(), UserModel.class, image,
-                UserMediaPath.IMAGE_NAME.resolve(newUser.getUsername()),
-                UserMediaPath.IMAGE_URL.resolve(newUser.getUsername()));
-
+        mediaService.saveMedia(newUser.getId(), UserModel.class, image, UserMediaPath.IMAGE_NAME.resolve(newUser.getUsername()), UserMediaPath.IMAGE_URL.resolve(newUser.getUsername()));
         return true;
     }
+
+
+    public MediaModel getUserImageUrl(String username) {
+        UserModel user = userRepository.findByUsername(username).get();
+        return mediaService.getMediaByOwner(user.getId(), UserModel.class).orElse(null);
+    }
+
 
     public UserData convertModel2Data(UserModel user) {
         if (Objects.isNull(user)) return null;
