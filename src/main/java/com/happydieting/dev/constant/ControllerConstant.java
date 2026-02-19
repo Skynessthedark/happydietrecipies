@@ -10,6 +10,7 @@ public class ControllerConstant {
     public static final String SIGNUP = "/signup";
     public static final String RECIPES = "/recipes";
     public static final String CATEGORY = "/category";
+    public static final String INGREDIENT = "/ingredient";
     public static final String SEARCH = "/search";
     public static final String REDIRECT_HOME = REDIRECT + HOME;
     public static final String REDIRECT_RECIPES = REDIRECT + RECIPES;
