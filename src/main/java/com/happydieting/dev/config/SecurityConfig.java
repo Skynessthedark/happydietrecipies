@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WEB_WHITELIST).permitAll()
                         .requestMatchers(LOGIN_PROCESSING_URL, REGISTER).permitAll()
+                        .requestMatchers("error").permitAll()
                         .requestMatchers(API_PROCESSING_URL).denyAll()
                         .anyRequest().authenticated()
                 )

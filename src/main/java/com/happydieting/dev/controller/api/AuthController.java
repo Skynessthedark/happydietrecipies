@@ -1,5 +1,6 @@
 package com.happydieting.dev.controller.api;
 
+import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.AuthData;
 import com.happydieting.dev.security.service.CustomUserDetailsService;
 import com.happydieting.dev.security.util.JwtUtil;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(ControllerConstant.API + ControllerConstant.AUTH)
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -31,17 +32,21 @@ public class AuthController {
         this.customUserDetailsService = customUserDetailsService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(ControllerConstant.LOGIN)
     public ResponseEntity<?> login(@RequestBody AuthData authRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Hatalı giriş");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/password supplied.");
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getUsername());
+
+        if(userDetails == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user found with username: " + authRequest.getUsername());
+
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         return ResponseEntity.ok(Collections.singletonMap("token", jwt));

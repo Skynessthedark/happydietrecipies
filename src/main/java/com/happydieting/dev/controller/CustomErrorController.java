@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -14,7 +15,7 @@ public class CustomErrorController implements ErrorController {
 
     private static final String ERROR_PAGE = "error/error";
 
-    @RequestMapping(ControllerConstant.ERROR)
+    @GetMapping(ControllerConstant.ERROR)
     public String error(HttpServletRequest request, Model model) {
         if (request.getDispatcherType() != DispatcherType.ERROR) {
             return ERROR_PAGE;

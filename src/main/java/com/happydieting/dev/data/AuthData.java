@@ -2,8 +2,10 @@ package com.happydieting.dev.data;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class AuthData {
+public class AuthData implements Serializable {
     private String username;
     private String password;
 }
