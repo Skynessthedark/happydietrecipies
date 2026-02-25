@@ -11,6 +11,7 @@ public class ControllerConstant {
     public static final String REDIRECT_RECIPES = REDIRECT + RECIPES;
     public static final String PROFILE = "/profile";
     public static final String USER = "/user";
+    public static final String UPDATE_PROFILE = "/update_profile";
 
     public class MyAccount{
         public static final String MY_ACCOUNT = "/me";

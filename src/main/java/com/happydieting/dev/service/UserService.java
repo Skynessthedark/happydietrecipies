@@ -1,12 +1,12 @@
 package com.happydieting.dev.service;
 
+
 import com.happydieting.dev.data.RegisterData;
 import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.enums.UserMediaPath;
 import com.happydieting.dev.model.MediaModel;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.repository.UserRepository;
-import com.happydieting.dev.enums.RecipeMediaPath;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
@@ -14,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.util.Objects;
+
 
 @Service
 public class UserService {
@@ -23,12 +25,14 @@ public class UserService {
     private final MediaService mediaService;
     private final PasswordEncoder passwordEncoder;
 
+
     public UserService(ModelMapper modelMapper, UserRepository userRepository, MediaService mediaService, @Lazy PasswordEncoder passwordEncoder) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.mediaService = mediaService;
         this.passwordEncoder = passwordEncoder;
     }
+
 
     @Transactional
     public boolean createUser(RegisterData registerForm, MultipartFile image) {
@@ -55,11 +59,45 @@ public class UserService {
     }
 
 
+    @Transactional
+    public boolean updateUser(String username, UserData userData, MultipartFile image) {
+        if (username == null || userData == null) {
+            return false;
+        }
+
+
+        UserModel user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            return false;
+        }
+
+
+        // Alan güncellemeleri
+        if (userData.getFullName() != null) {
+            user.setFullName(userData.getFullName());
+        }
+        if (userData.getBio() != null) {
+            user.setBio(userData.getBio());
+        }
+
+
+        if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userData.getPassword()));
+        }
+
+
+        userRepository.save(user);
+
+
+        // TODO: image kısmı
+        return true;
+    }
+
+
     public MediaModel getUserImageUrl(String username) {
         UserModel user = userRepository.findByUsername(username).get();
         return mediaService.getMediaByOwner(user.getId(), UserModel.class).orElse(null);
     }
-
 
     public UserData convertModel2Data(UserModel user) {
         if (Objects.isNull(user)) return null;
