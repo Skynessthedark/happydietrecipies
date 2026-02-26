@@ -7,16 +7,12 @@ import com.happydieting.dev.facade.RecipeFacade;
 import com.happydieting.dev.facade.UserFacade;
 import com.happydieting.dev.model.UserModel;
 import com.happydieting.dev.security.service.SessionService;
-import com.happydieting.dev.util.MediaUtil;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -58,7 +54,7 @@ public class MyAccountController {
         return "my-account/recipes";
     }
 
-    @GetMapping(ControllerConstant.PROFILE)
+    @GetMapping(ControllerConstant.MyAccount.PROFILE)
     public String profile(Model model) {
         UserModel currentUser = sessionService.getSessionUser();
 

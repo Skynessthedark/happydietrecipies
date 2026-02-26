@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.util.Objects;
 
 
@@ -61,10 +60,9 @@ public class UserService {
 
     @Transactional
     public boolean updateUser(String username, UserData userData, MultipartFile image) {
-        if (username == null || userData == null) {
+        if (username == null || username.isBlank() || userData == null) {
             return false;
         }
-
 
         UserModel user = userRepository.findByUsername(username).orElse(null);
         if (user == null) {
@@ -72,6 +70,7 @@ public class UserService {
         }
 
 
+        //TODO: basit alanlar için mapper kullanılabilir
         // Alan güncellemeleri
         if (userData.getFullName() != null) {
             user.setFullName(userData.getFullName());
