@@ -14,8 +14,11 @@ public class ControllerConstant {
     public static final String SEARCH = "/search";
     public static final String REDIRECT_HOME = REDIRECT + HOME;
     public static final String REDIRECT_RECIPES = REDIRECT + RECIPES;
+    public static final String USER = "/user";
+    public static final String REDIRECT_ERROR = REDIRECT + ERROR;
 
     public class MyAccount{
         public static final String MY_ACCOUNT = "/me";
+        public static final String PROFILE = "/profile";
     }
 }
