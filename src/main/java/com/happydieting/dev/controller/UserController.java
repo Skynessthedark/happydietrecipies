@@ -1,6 +1,5 @@
 package com.happydieting.dev.controller;
 
-
 import com.happydieting.dev.constant.ControllerConstant;
 import com.happydieting.dev.data.UserData;
 import com.happydieting.dev.facade.UserFacade;
@@ -35,36 +34,31 @@ public class UserController {
     }
 
     //TODO: username logic olarak gereksiz, sadece /update-profile olarak path belirlenebilir.
-    @GetMapping("/{username}/update-profile")
-    public String getUpdateProfile(@PathVariable String username,
-                                   Model model) {
+    @GetMapping(ControllerConstant.UPDATE_PROFILE)
+    public String getUpdateProfile(java.security.Principal principal, Model model) {
+        String username = principal.getName();
+
         UserModel user = userRepository.findByUsername(username)
                 .orElse(null);
 
         if (user == null) {
-            return ControllerConstant.REDIRECT_HOME;
+            return ControllerConstant.REDIRECT + ControllerConstant.MyAccount.PROFILE;
         }
 
         UserData userData = userFacade.getUserForProfile(user);
-        userData.setImageUrl("/user/" + username + "/image");
-
         model.addAttribute("profileForm", userData);
 
         return "profile/update-profile";
     }
 
-    @PostMapping("/{username}/update-profile")
-    public String updateUser(@PathVariable String username,
-                             @ModelAttribute("profileForm") UserData userData,
-                             @RequestParam(required = false) MultipartFile image) {
-
-        boolean isSaved = userFacade.updateUser(username, userData, image);
+    @PostMapping(ControllerConstant.UPDATE_PROFILE)
+    public String updateUser(@ModelAttribute("profileForm") UserData userData,
+                             @RequestParam(value = "imageFile", required = false) MultipartFile image) {
+        boolean isSaved = userFacade.updateUser(userData, image);
         if (!isSaved) {
             return ControllerConstant.REDIRECT_ERROR;
         }
-
-        // TODO: Düzeltilecek
-        return "redirect:/user/" + username + "/update-profile";
+        return ControllerConstant.REDIRECT + ControllerConstant.USER + ControllerConstant.UPDATE_PROFILE;
     }
 }
 

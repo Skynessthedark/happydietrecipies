@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -50,7 +51,7 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(registerForm.getPassword());
             newUser.setPassword(encodedPassword);
         } else {
-            return false; // Şifresiz kullanıcı kaydedilemez
+            return false;
         }
         userRepository.save(newUser);
         mediaService.saveMedia(newUser.getId(), UserModel.class, image, UserMediaPath.IMAGE_NAME.resolve(newUser.getUsername()), UserMediaPath.IMAGE_URL.resolve(newUser.getUsername()));
@@ -59,40 +60,42 @@ public class UserService {
 
 
     @Transactional
-    public boolean updateUser(String username, UserData userData, MultipartFile image) {
-        if (username == null || username.isBlank() || userData == null) {
+    public boolean updateUser(UserData userData, MultipartFile image) {
+        if (userData == null || userData.getEmail() == null) {
             return false;
         }
 
-        UserModel user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) {
+        Optional<UserModel> optionalUser = userRepository.findByUsername(userData.getEmail());
+        if (optionalUser.isEmpty()) {
             return false;
         }
-
+        UserModel user = optionalUser.get();
 
         //TODO: basit alanlar için mapper kullanılabilir
         // Alan güncellemeleri
-        if (userData.getFullName() != null) {
-            user.setFullName(userData.getFullName());
-        }
-        if (userData.getBio() != null) {
-            user.setBio(userData.getBio());
-        }
-
-
+        if (userData.getFullName() != null) user.setFullName(userData.getFullName());
+        if (userData.getBio() != null) user.setBio(userData.getBio());
         if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userData.getPassword()));
         }
 
+        // TODO: image kısmı
+        if (image != null && !image.isEmpty()) {
+            // mediaService.saveMedia metodunun mevcut resmi override ettiğini varsayıyoruz.
+            mediaService.saveMedia(
+                    user.getId(),
+                    UserModel.class,
+                    image,
+                    UserMediaPath.IMAGE_NAME.resolve(user.getUsername()),
+                    UserMediaPath.IMAGE_URL.resolve(user.getUsername())
+            );
+        }
 
         userRepository.save(user);
-
-
-        // TODO: image kısmı
         return true;
     }
 
-
+    // TODO: Şu kısım sanki gereksiz gibi buraya tekrar bak
     public MediaModel getUserImageUrl(String username) {
         UserModel user = userRepository.findByUsername(username).get();
         return mediaService.getMediaByOwner(user.getId(), UserModel.class).orElse(null);

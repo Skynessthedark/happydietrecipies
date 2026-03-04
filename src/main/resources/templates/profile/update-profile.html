@@ -1,11 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="~{layout/main :: layout-head}">
+    <title>Profil Güncelle</title>
+    <link rel="stylesheet" th:href="@{/css/custom/list_profile.css}">
 </head>
-<body>
-<h1>Update</h1>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<main class="flex-grow-1">
+    <div th:replace="~{layout/main :: navbar}"></div>
+
+    <section class="py-5">
+        <div class="container px-4">
+            <div th:replace="~{layout/main :: alerts}"></div>
+
+            <form th:action="@{/user/update-profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
+
+                <div class="row g-4 align-items-stretch justify-content-center">
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4">
+                            <div class="card-body d-flex flex-column align-items-center">
+                                <div class="position-relative mb-4">
+                                    <div class="profile-avatar-glow">
+                                        <img id="profilePreview"
+                                             th:src="${(profileForm.imageUrl != null && !profileForm.imageUrl.isEmpty()) ? profileForm.imageUrl : '/images/profile_image.png'}"
+                                             class="rounded-circle shadow border border-4 border-white"
+                                             alt="Profile image"
+                                             style="width: 180px; height: 180px; object-fit: cover;">
+                                    </div>
+                                    <label for="imageUpload" class="position-absolute bottom-0 end-0 btn btn-sm btn-primary rounded-circle shadow">
+                                        <i class="bi bi-camera-fill"></i>
+                                        <input type="file" id="imageUpload" name="imageFile" hidden accept="image/*" onchange="previewImage(this)">
+                                    </label>
+                                </div>
+
+                                <h3 class="fw-bold text-dark mb-1" th:text="*{fullName}">Name</h3>
+                                <p class="text-muted small mb-4">Please click on the camera to update your profile photo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                                <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-pencil-square me-2"></i>CHANGE PROFILE</h4>
+                            </div>
+
+                            <div class="card-body p-4 px-lg-5">
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold"><i class="bi bi-person me-2"></i>Name</label>
+                                    <input type="text" class="form-control form-control-lg border-0 bg-light rounded-3"
+                                           th:field="*{fullName}" placeholder="Please enter your name." readonly>
+                                    <div class="form-text text-info">Your can't change name.</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold"><i class="bi bi-envelope me-2"></i>E-Mail</label>
+                                    <input type="email" class="form-control form-control-lg border-0 bg-light rounded-3"
+                                           th:field="*{email}" placeholder="E-posta adresiniz" readonly>
+                                    <div class="form-text text-info">Your can't change e-mail.</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold"><i class="bi bi-journal-text me-2"></i>Biography</label>
+                                    <textarea class="form-control border-0 bg-light rounded-4"
+                                              th:field="*{bio}" rows="5" placeholder="About yor self..."></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end gap-2 mt-5">
+                                    <a th:href="@{/me/profile}" class="btn btn-light px-4 py-2 rounded-pill">CANCEL</a>
+                                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm">
+                                        <i class="bi bi-save me-2"></i> SAVE
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+<script th:replace="~{layout/main :: scripts}"></script>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profilePreview').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 
 </body>
 </html>
